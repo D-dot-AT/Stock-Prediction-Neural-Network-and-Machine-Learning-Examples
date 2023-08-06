@@ -39,7 +39,6 @@ X_test = scaler.transform(X_test)
 # Predict the labels for test data
 y_pred = (model.predict(X_test) > 0.5).astype("int32")
 
-
 # Calculate accuracy and precision
 accuracy = accuracy_score(y_test, y_pred)
 precision = precision_score(y_test, y_pred)
@@ -48,8 +47,8 @@ print(f'Accuracy: {accuracy*100:.2f}%')
 print(f'Precision: {precision*100:.2f}%')
 
 # Create output directory if it does not exist
-os.makedirs('../output/tensorflow', exist_ok=True)
+os.makedirs('output', exist_ok=True)
 
 # Save the model and scaler
-pickle.dump(model, open('../output/tensorflow/model.pkl'))
-pickle.dump(scaler, open('../output/tensorflow/scaler.pkl', 'wb'))
+pickle.dump(model, open('output/model.pkl', 'wb'))
+pickle.dump(scaler, open('output/scaler.pkl', 'wb'))
