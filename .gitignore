@@ -2,3 +2,6 @@
 .idea
 *output/
 *__pycache__*
+model.*
+scaler.*
+lightning_logs
