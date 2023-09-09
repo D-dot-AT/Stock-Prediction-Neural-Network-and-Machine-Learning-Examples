@@ -2,7 +2,7 @@
 Your task is to create a Python script to develop a neural network using for stock data classification.
 The goal is to build a model that maximizes precision.
 
-Library to use: PyTorch Lightning
+Library to use: Tensorflow
 
 You will be using two datasets: `train.csv` and `test.csv`, both located in the `../example_data/` directory. 
 The data in these files are structured similarly, where all but the final column are 
@@ -38,7 +38,8 @@ Here is a detailed breakdown of the tasks you need to complete:
   * False Negatives (FN)
 
 ## Step 5: Statistical Analysis
-* Using the counts obtained from Step 4, perform Fisher's exact test to determine the p-value. The test should be structured as follows:
+Using the counts obtained from Step 4, perform Fisher's exact test to determine the p-value. 
+The test should be structured as follows:
 * Model Distribution: Positives: (TP), Total: (TP + FP)
 * Overall Distribution: Positives: (FN + TP), Total: (TP + FP + TN + FN)
 
@@ -46,9 +47,8 @@ Here is a detailed breakdown of the tasks you need to complete:
 Print the following information:
 * Precision
 * Accuracy
-* Counts for TP, FP, TN, FN
-* The p-value from Fisher's exact test 
+* The p-value from Fisher's exact test labeled as 'P-value of precision'
 
 ## Additional Information
 * Comment your code appropriately to explain complex or unclear sections.
-* Code should be made with a "less is more" bias
+* Code should be made with a "less is more" bias.
