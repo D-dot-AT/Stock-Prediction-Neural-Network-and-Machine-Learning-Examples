@@ -48,7 +48,7 @@ Y_test = test_data.iloc[:, -1]
 X_test_scaled = scaler.transform(X_test)
 
 # Get the predictions
-predictions = (model.predict(X_test_scaled) > 0.6).astype("int32")
+predictions = (model.predict(X_test_scaled) > 0.6).astype(int)
 
 # Calculate metrics
 Y_test_array = Y_test.to_numpy().ravel()
