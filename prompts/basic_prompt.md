@@ -2,7 +2,7 @@
 Your task is to create a Python script to develop a neural network using for stock data classification.
 The goal is to build a model that maximizes precision.
 
-Libary to use: PyTorch Lightning
+Library to use: PyTorch Lightning
 
 You will be using two datasets: `train.csv` and `test.csv`, both located in the `../example_data/` directory. 
 The data in these files are structured similarly, where all but the final column are 
@@ -51,3 +51,4 @@ Print the following information:
 
 ## Additional Information
 * Comment your code appropriately to explain complex or unclear sections.
+* Code should be made with a "less is more" bias
