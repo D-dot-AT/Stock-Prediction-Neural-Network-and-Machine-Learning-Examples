@@ -1,13 +1,14 @@
 import pickle
 
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
-from scipy.stats import fisher_exact
 import pytorch_lightning as pl
 import torch
+from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
+
+from common import print_statistics
 
 # Step 1: Data Preparation
 # Loading the training data
@@ -58,11 +59,6 @@ train_loader = DataLoader(train_dataset, batch_size=32)
 trainer = pl.Trainer(max_epochs=5)
 trainer.fit(model, train_loader)
 
-# Saving the trained model and scaler
-torch.save(model.state_dict(), 'model.pt')
-with open('scaler.pkl', 'wb') as f:
-    pickle.dump(scaler, f)
-
 # Step 4: Testing the Model
 # Loading the test data
 test_data = pd.read_csv('../example_data/test.csv', header=None)
@@ -78,21 +74,11 @@ with torch.no_grad():
     predictions = model(torch.tensor(X_test_scaled)).numpy()
 
 # Binarizing predictions
-predictions_bin = (predictions > 0.5).astype(int)
+predictions_bin = (predictions > 0.6).astype(int)
 
 # Calculating metrics
 precision = precision_score(Y_test, predictions_bin)
 accuracy = accuracy_score(Y_test, predictions_bin)
 TN, FP, FN, TP = confusion_matrix(Y_test, predictions_bin).ravel()
 
-# Step 5: Statistical Analysis
-# Performing Fisher's exact test
-contingency_table = [[TP, FP], [FN, TN]]
-oddsratio, pvalue = fisher_exact(contingency_table)
-
-# Step 6: Output
-# Printing the results
-print(f'Positive rate in test set: {(TP + FN) / (TP + FP + TN + FN)}')
-print(f'Model precision: {precision}')
-print(f'Accuracy: {accuracy}')
-print(f'P-value of precision: {pvalue}')
+print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)

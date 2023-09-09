@@ -1,8 +1,7 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
-from scipy.stats import fisher_exact
+from sklearn.preprocessing import StandardScaler
+from common import print_statistics
 
 # Step 1: Data Preparation
 # Load the training data
@@ -39,15 +38,4 @@ FP = sum((Y_test == 0) & (Y_pred == 1))
 TN = sum((Y_test == 0) & (Y_pred == 0))
 FN = sum((Y_test == 1) & (Y_pred == 0))
 
-precision = precision_score(Y_test, Y_pred)
-accuracy = accuracy_score(Y_test, Y_pred)
-
-# Step 5: Statistical Analysis
-# Perform Fisher's exact test
-contingency_table = [[TP, FP], [FN, TN]]
-_, p_value = fisher_exact(contingency_table)
-
-# Step 6: Output
-print(f'Precision: {precision}')
-print(f'Accuracy: {accuracy}')
-print(f'P-value of precision: {p_value}')
+print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)

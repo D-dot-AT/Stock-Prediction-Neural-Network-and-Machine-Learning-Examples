@@ -23,7 +23,6 @@ Here is a detailed breakdown of the tasks you need to complete:
 
 ## Step 3: Training the Model
 * Train your model using the training data (X and Y variables from Step 1).
-* Save the trained model and scaler as files for future use.
 
 ## Step 4: Testing the Model
 * Load the test data from `test.csv`. The structure of this file is the same as that of `train.csv`.

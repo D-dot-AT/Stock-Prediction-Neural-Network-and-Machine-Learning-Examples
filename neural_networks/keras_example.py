@@ -1,10 +1,10 @@
+import numpy as np
 import pandas as pd
 from keras import layers
-from scipy.stats import fisher_exact
-from sklearn.metrics import accuracy_score, precision_score
 from sklearn.preprocessing import StandardScaler
 from tensorflow import keras
-import numpy as np
+
+from common import print_statistics
 
 # Step 1: Data Preparation
 # Load the training data
@@ -48,7 +48,7 @@ Y_test = test_data.iloc[:, -1]
 X_test_scaled = scaler.transform(X_test)
 
 # Get the predictions
-predictions = (model.predict(X_test_scaled) > 0.5).astype("int32")
+predictions = (model.predict(X_test_scaled) > 0.6).astype("int32")
 
 # Calculate metrics
 Y_test_array = Y_test.to_numpy().ravel()
@@ -59,19 +59,4 @@ FP = np.sum((predictions_array == 1) & (Y_test_array == 0))
 TN = np.sum((predictions_array == 0) & (Y_test_array == 0))
 FN = np.sum((predictions_array == 0) & (Y_test_array == 1))
 
-
-precision = precision_score(Y_test, predictions)
-accuracy = accuracy_score(Y_test, predictions)
-
-# Step 5: Statistical Analysis
-# Perform Fisher's exact test
-oddsratio, pvalue = fisher_exact([[TP, FP], [FN, TN]])
-
-# Step 6: Output
-print("Precision: ", precision)
-print("Accuracy: ", accuracy)
-print("True Positives: ", TP)
-print("False Positives: ", FP)
-print("True Negatives: ", TN)
-print("False Negatives: ", FN)
-print("P-value from Fisher's exact test: ", pvalue)
+print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)

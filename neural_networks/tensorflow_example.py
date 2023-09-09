@@ -1,9 +1,8 @@
-import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
-from scipy.stats import fisher_exact
 import tensorflow as tf
+from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from common import print_statistics
 
 # Step 1: Data Preparation
 # Load the training data
@@ -40,20 +39,11 @@ Y_test = test_data.iloc[:, -1]
 X_test = scaler.transform(X_test)
 
 # Get predictions
-Y_pred = (model.predict(X_test) > 0.5).astype(int).flatten()
+Y_pred = (model.predict(X_test) > 0.6).astype(int).flatten()
 
 # Calculate metrics
 precision = precision_score(Y_test, Y_pred)
 accuracy = accuracy_score(Y_test, Y_pred)
-tn, fp, fn, tp = confusion_matrix(Y_test, Y_pred).ravel()
+TN, FP, FN, TP = confusion_matrix(Y_test, Y_pred).ravel()
 
-# Step 5: Statistical Analysis
-# Perform Fisher's exact test
-table = [[tp, fp], [fn, tn]]
-_, p_value = fisher_exact(table)
-
-# Step 6: Output
-# Print the required information
-print(f'Precision: {precision}')
-print(f'Accuracy: {accuracy}')
-print(f'P-value of precision: {p_value}')
+print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
