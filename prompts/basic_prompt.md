@@ -1,12 +1,14 @@
 
-Your task is to create a Python script to develop a neural network using for stock data classification.
+Your task is to create a Python script to develop a model for stock data classification.
 The goal is to build a model that maximizes precision.
 
-Library to use: Tensorflow
+Method: Neural Network
+Library: Tensorflow
 
-You will be using two datasets: `train.csv` and `test.csv`, both located in the `../example_data/` directory. 
+You will be training and testing using two datasets: `train.csv` 
+and `test.csv`, both located in the `../example_data/` directory. 
 The data in these files are structured similarly, where all but the final column are 
-floats representing the features, and the final column is a 1/0 integer representing the labels.
+floats representing the features, and the final column are boolean 1/0 integer labels.
 
 Here is a detailed breakdown of the tasks you need to complete:
 
@@ -28,25 +30,13 @@ Here is a detailed breakdown of the tasks you need to complete:
 * Load the test data from `test.csv`. The structure of this file is the same as that of `train.csv`.
 * Use the scaler to scale the feature data of `test.csv`.
 * Run the model on the scaled test data to get predictions.
-* Calculate the following metrics based on the model predictions:
-  * Precision
-  * Accuracy
-  * True Positives (TP)
-  * False Positives (FP)
-  * True Negatives (TN)
-  * False Negatives (FN)
+* Find the confusion matrix variables
+* call the function `print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)` imported via `from common import print_statistics`
 
-## Step 5: Statistical Analysis
-Using the counts obtained from Step 4, perform Fisher's exact test to determine the p-value. 
-The test should be structured as follows:
-* Model Distribution: Positives: (TP), Total: (TP + FP)
-* Overall Distribution: Positives: (FN + TP), Total: (TP + FP + TN + FN)
-
-## Step 6: Output
-Print the following information:
-* Precision
-* Accuracy
-* The p-value from Fisher's exact test labeled as 'P-value of precision'
+## Step 5: Creating predictions
+* load data from `latest.csv`.  The first column is a string stock ticker.  The remaining columns match the floating point feature vector of `train.csv`
+* the data is the most recent data and has no label as we do not yet know the outcome.
+* use the model to score latest data, print the 5 tickers with the top scores along with the scores represented as a percent.
 
 ## Additional Information
 * Comment your code appropriately to explain complex or unclear sections.
