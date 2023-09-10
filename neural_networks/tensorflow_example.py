@@ -1,49 +1,46 @@
 import pandas as pd
 import tensorflow as tf
-from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
 from common import print_statistics
 
 # Step 1: Data Preparation
-# Load the training data
-train_data = pd.read_csv('../example_data/train.csv', header=None)
-X_train = train_data.iloc[:, :-1]
-Y_train = train_data.iloc[:, -1]
-
-# Scale the feature data
+data_train = pd.read_csv('../example_data/train.csv', header=None)
+X_train = data_train.iloc[:, :-1]
+Y_train = data_train.iloc[:, -1]
 scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
+X_train_scaled = scaler.fit_transform(X_train)
 
 # Step 2: Model Creation
-# Create a classification model
-input_features = X_train.shape[1]
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(64, activation='relu', input_shape=(input_features,)),
-    tf.keras.layers.Dense(1, activation='sigmoid')
+input_dim = X_train_scaled.shape[1]
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(128, input_dim=input_dim, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(1, activation='sigmoid'),
 ])
 
 # Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+precision_metric = tf.keras.metrics.Precision()
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[precision_metric])
 
-# Step 3: Training the Model
-# Train the model
-model.fit(X_train, Y_train, epochs=10, batch_size=32)
+# Step 3: Model Training
+model.fit(X_train_scaled, Y_train, epochs=10, batch_size=32)
 
-# Step 4: Testing the Model
-# Load the test data
-test_data = pd.read_csv('../example_data/test.csv', header=None)
-X_test = test_data.iloc[:, :-1]
-Y_test = test_data.iloc[:, -1]
+# Step 4: Model Testing
+data_test = pd.read_csv('../example_data/test.csv', header=None)
+X_test = data_test.iloc[:, :-1]
+Y_test = data_test.iloc[:, -1]
+X_test_scaled = scaler.transform(X_test)
+predictions = (model.predict(X_test_scaled) > 0.5).astype('int32')
+tn, fp, fn, tp = confusion_matrix(Y_test, predictions).ravel()
+print_statistics(tp=tp, fp=fp, tn=tn, fn=fn)
 
-# Scale the feature data
-X_test = scaler.transform(X_test)
-
-# Get predictions
-Y_pred = (model.predict(X_test) > 0.6).astype(int).flatten()
-
-# Calculate metrics
-precision = precision_score(Y_test, Y_pred)
-accuracy = accuracy_score(Y_test, Y_pred)
-TN, FP, FN, TP = confusion_matrix(Y_test, Y_pred).ravel()
-
-print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
+# Step 5: Creating Predictions
+data_latest = pd.read_csv('../example_data/latest.csv')
+stock_tickers = data_latest.iloc[:, 0]
+feature_vectors = data_latest.iloc[:, 1:]
+feature_vectors_scaled = scaler.transform(feature_vectors)
+scores = model.predict(feature_vectors_scaled)
+top_5_idx = scores[:, 0].argsort()[-5:][::-1]
+for idx in top_5_idx:
+    print(f'{stock_tickers[idx]}: {scores[idx][0]*100:.2f}%')
