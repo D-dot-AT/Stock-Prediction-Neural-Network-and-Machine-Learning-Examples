@@ -30,9 +30,21 @@ resource to guide you in developing sophisticated stock prediction models using
 pip install -r requirements.txt.
 ```
 ## About the Example Data
-The data provided in example_data is an example of what is provided as a D.AT data delivery.
+The data provided in `example_data` is an example of what is provided as a D.AT data delivery.
 
-`train.csv` - 5 years of S&P 500 stock data, segmented, normalized. 
-Each row represents is a segment of the stock data available on a given trading day.
-Each row ends with a boolean label 
+This dataset encapsulates 5 years of stock data from the S&P 500, 
+segmented into intervals of 30 trading days each. The data in each segment 
+has been normalized using a method where values are divided by the most 
+recent data point within the segment. Each row in the dataset represents a 
+specific segment, providing a snapshot of the stock data available on a 
+particular trading day. Moreover, rows are labeled to indicate whether the 
+stock experienced a minimum gain of 5% within the subsequent 10 trading days.
+
+* `train.csv`: Of the 5 years, it contains the first 4 years of data.
+* `test.csv`: Of the 5 years, it contains the final year of data.
+* `latest.csv`: This file contains data from the most recent trading 
+day for all stocks listed. While it lacks labels (since these pertain to future events), 
+each row maintains the same feature vector structure as those in the `train` and `test` 
+files. The rows commence with the stock ticker symbol, serving as a key tool to pinpoint 
+stocks with promising prospects for good performance. 
 
