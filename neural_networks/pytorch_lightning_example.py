@@ -1,5 +1,5 @@
 import pandas as pd
-import pytorch_lightning as pl
+import pytorch_lightning as L
 import torch
 from sklearn.metrics import precision_score, accuracy_score, confusion_matrix
 from sklearn.preprocessing import StandardScaler
@@ -24,7 +24,7 @@ input_features = X_scaled.shape[1]
 
 
 # Creating the neural network model
-class SimpleNN(pl.LightningModule):
+class SimpleNN(L.LightningModule):
     def __init__(self):
         super().__init__()
         self.layer1 = nn.Linear(input_features, 64)
@@ -55,7 +55,7 @@ train_dataset = TensorDataset(torch.tensor(X_scaled), torch.tensor(Y))
 train_loader = DataLoader(train_dataset, batch_size=32)
 
 # Initializing a trainer and training the model
-trainer = pl.Trainer(max_epochs=5)
+trainer = L.Trainer(max_epochs=5)
 trainer.fit(model, train_loader)
 
 # Step 4: Testing the Model
