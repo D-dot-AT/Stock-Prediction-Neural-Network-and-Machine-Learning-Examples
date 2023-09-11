@@ -1,6 +1,31 @@
 * language: Python
-* Method: Neural Network
-* Library: PyTorch Lightning
+* Method: Genetic algorithm.
+* 
+A chromosome is a set of genes that are all boolean conditions combined via AND.
+A gene has three elements: the index of the feature vector, a lower bound and an upper bound.
+A gene returns true if the value of the feature vector at the index is between the lower and upper bound.
+
+Mutation on a chromosome can happen in the following ways:
+* a gene can be mutated
+* a new gene can be added
+* a gene can be deleted.
+The mutation rate for additions and deletions is 1% - meaning this type of mutation applies to only 1% of children.
+The mutation rate for gene mutations is 5%.
+
+Mutation on a gene can happen in the following way:
+* the index is shifted up or down by 1.  if this results in being index out of bounds, then the mutation is not applied.
+* the lower bound is multiplied by a random value between .95 and .99
+* the upper bound is multiplied by a random value betwee 1.01 and 1.05
+
+The test set is a set of feature vectors of floats each with boolean labels.
+to evaluate a generation, randomly select a subset of 10% of the test set and evaluate on that.
+
+Sexual recombination is handled in the following way:
+Child is made of a combination of the genes of parents A and B.
+Child starts out with no genes.
+For each gene in parent A, add that gene to child with a random probability of 50%
+Do the same for parent B.
+Apply mutation to the child.
 
 Develop a model, using the above criteria, for classifying stock data with a focus on maximizing precision. 
 Follow the steps below using the datasets `train.csv` and `test.csv` in the 

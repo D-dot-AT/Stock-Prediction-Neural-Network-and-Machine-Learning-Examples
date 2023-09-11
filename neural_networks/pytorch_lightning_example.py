@@ -1,5 +1,3 @@
-import pickle
-
 import pandas as pd
 import pytorch_lightning as pl
 import torch
@@ -48,6 +46,7 @@ class SimpleNN(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=0.001)
 
+
 model = SimpleNN()
 
 # Step 3: Training the Model
@@ -82,3 +81,14 @@ accuracy = accuracy_score(Y_test, predictions_bin)
 TN, FP, FN, TP = confusion_matrix(Y_test, predictions_bin).ravel()
 
 print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
+
+# Load latest data
+latest_data = pd.read_csv('../example_data/latest.csv')
+tickers = latest_data.iloc[:, 0].values
+X_latest = scaler.transform(latest_data.iloc[:, 1:].values)
+
+# Predict scores using the model and print the top 5 stock tickers along with their percentage scores
+scores = model(torch.Tensor(X_latest)).detach().numpy()
+top_5_indices = scores.flatten().argsort()[-5:][::-1]
+for idx in top_5_indices:
+    print(f'{tickers[idx]}: {scores[idx][0] * 100:.2f}%')
