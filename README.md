@@ -4,7 +4,7 @@
 
 A repository of ML and NN methods and libraries along with sample stock data for training and testing.
 These are meant to be simple, easy to understand and highlight the essential components of each method.
-Examples also show how to use run the models on current data in order to get stock predictions.
+Examples also show how to run the models on current data in order to get stock predictions.
 
 
 ## Performance
