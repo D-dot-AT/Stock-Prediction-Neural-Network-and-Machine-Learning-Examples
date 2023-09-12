@@ -2,8 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Various examples of ML and NN methods and libraries along with sample stock data for training and testing.
-Examples are meant to be simple, easy to understand and highlight the essential components of each method.
+A repository of ML and NN methods and libraries along with sample stock data for training and testing.
+These are meant to be simple, easy to understand and highlight the essential components of each method.
+Examples also show how to use run the models on current data in order to get stock predictions.
 
 
 ## Performance
@@ -50,6 +51,7 @@ Abbreviations:
 ```bash
 pip install -r requirements.txt.
 ```
+
 ## About the Example Data
 The data provided in `example_data` is an example of what is provided by the D.AT platform.
 
