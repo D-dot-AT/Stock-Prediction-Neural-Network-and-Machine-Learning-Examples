@@ -2,10 +2,13 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Various examples of ML and NN methods and libraries, trained and tested on [D.AT stock data](https://d.at/ref/github-python-examples).
+Various examples of ML and NN methods and libraries along with sample stock data for training and testing.
+Examples are meant to be simple, easy to understand and highlight the essential components of each method.
 
 
 ## Performance
+All models were trained and tested on the `example_data` from [D.AT](https://d.at/ref/github-python-examples) 
+to rank which performed best.
 
 | Method                  | p-value  | winner |
 |-------------------------|----------|:------:|
