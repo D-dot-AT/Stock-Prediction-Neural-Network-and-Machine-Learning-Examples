@@ -37,8 +37,8 @@ features_latest = data_latest.iloc[:, 1:]
 
 # Predict scores using the model and print the top 5 stock tickers along with their percentage scores
 scores = model.predict_proba(features_latest)
-percentage_scores = scores[:, 1] # Get the probability of belonging to class 1
-top_5_indices = percentage_scores.argsort()[-5:][::-1] # Get indices of top 5 scores
+percentage_scores = scores[:, 1]  # Get the probability of belonging to class 1
+top_5_indices = percentage_scores.argsort()[-5:][::-1]  # Get indices of top 5 scores
 
 # Print top 5 stock tickers with their percentage scores
 for i in top_5_indices:
