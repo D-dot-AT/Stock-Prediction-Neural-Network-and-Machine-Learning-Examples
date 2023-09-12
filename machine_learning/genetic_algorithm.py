@@ -1,6 +1,6 @@
-# This WIP.  It does not perform well, the winning chromosome essentially marks all tests as positive.
+# This WIP.  It does not perform well; the winning chromosome essentially marks all tests as positive.
 # I suspect the issue is with the fitness function.  It needs to reward both for high precision as well
-# as high number of true positives.
+# as a high number of true positives.
 
 import random
 import pandas as pd
