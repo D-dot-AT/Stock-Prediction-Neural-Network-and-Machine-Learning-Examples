@@ -14,19 +14,20 @@ When investing, you care much more about the performance of the stocks you have 
 than those that you decided not to buy.
 
 | Method               | run 1    | run 2    | run 3    | run 4    | run 5    | median   | winner |
-| -------------------- |----------|----------| -------- | -------- | -------- |----------|:------:|
+| -------------------- |----------|----------|----------|----------|----------|----------|:------:|
 | Gradient Boost       | 7.68e-15 |          |          |          |          | 7.68e-15 |        |
 | K-means Clustering   | 0.0047   |          |          |          |          | 0.0047   |        |
 | Logistic Regression  | 1.33e-06 |          |          |          |          | 1.33e-06 |        |
 | Random Forest        | 5.80e-20 |          |          |          |          | 5.80e-20 |        |
-| Keras                | 2.33e-19 | 3.65e-14 | 2.33e-12 | 2.44e-17 | 1.77e-12 | 3.65e-14 |        |
+| Keras                | 1.56e-22 | 3.43e-16 | 2.90e-21 | 1.55e-17 | 2.10e-15 | 1.55e-17 |        |
 | PyTorch              | 1.37e-19 | 1.76e-15 | 3.47e-22 | 1.66e-20 | 1.90e-17 | 1.37e-19 |        |
 | PyTorch Lightning    | 5.40e-20 | 2.87e-23 | 1.18e-22 | 1.37e-20 | 7.82e-22 | 7.82e-22 |   🏆   |
-| Tensorflow           | 1.82e-14 | 1.33e-23 | 2.46e-18 | 1.91e-20 | 1.27e-15 | 2.46e-18 |        |
+| Tensorflow           | 1.14e-13 | 8.79e-20 | 5.00e-23 | 5.43e-19 | 1.53e-14 | 5.43e-19 |        |
 
 ### Best p-value:  PyTorch Lightning
 
-Note that these are the *most basic* examples. Further, there are variations in the neural network implementations. 
+Note that these are the *most basic* examples. Efforts were made for the neural nets to be apples-to-apples,
+but there may be variations in the implementations. 
 More sophisticated versions of these methods or hyperparameter tuning could produce better results.
 
 ## Getting Started

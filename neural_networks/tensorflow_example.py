@@ -14,8 +14,7 @@ X_train_scaled = scaler.fit_transform(X_train)
 # Step 2: Model Creation
 input_dim = X_train_scaled.shape[1]
 model = tf.keras.Sequential([
-    tf.keras.layers.Dense(128, input_dim=input_dim, activation='relu'),
-    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, input_dim=input_dim, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid'),
 ])
 

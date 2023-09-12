@@ -20,8 +20,7 @@ X_train_scaled = scaler.fit_transform(X_train)
 # Develop a classification model using TensorFlow
 input_dim = X_train_scaled.shape[1]
 model = keras.Sequential([
-    layers.Dense(128, input_dim=input_dim, activation='relu'),
-    layers.Dense(64, activation='relu'),
+    layers.Dense(64, input_dim=input_dim,  activation='relu'),
     layers.Dense(1, activation='sigmoid'),
 ])
 
