@@ -1,4 +1,4 @@
-# D.AT Python Examples
+# Stock Prediction Neural Network and Machine Learning Examples (Python)
 
 <div align="center">
   <a href="http://d.at/ref/github">
@@ -7,9 +7,6 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 </div>
-
-
-# Stock Prediction Neural Network and Machine Learning Examples
 
 This repository serves as a collection of Python examples showcasing 
 the integration and utilization of various NN and ML libraries with data 
