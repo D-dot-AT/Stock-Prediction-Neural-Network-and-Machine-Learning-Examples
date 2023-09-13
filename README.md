@@ -49,7 +49,7 @@ Abbreviations:
 3. Install the necessary libraries:
 
 ```bash
-pip install -r requirements.txt.
+pip install -r requirements.txt
 ```
 
 ## About the Example Data
@@ -60,8 +60,8 @@ segmented into intervals of 30 trading days each. The data in each segment
 has been normalized using a method where values are divided by the most 
 recent data point within the segment. Each row in the dataset represents a 
 specific segment, providing a snapshot of the stock data available on a 
-particular trading day. Moreover, rows are labeled to indicate whether the 
-stock experienced a minimum gain of 5% within the subsequent 10 trading days.
+particular trading day. Rows are labeled to indicate when the 
+stock had a minimum gain of 5% within the subsequent 10 trading days.
 
 * `train.csv`: Of the 5 years, it contains the first 4 years of data.
 * `test.csv`: Of the 5 years, it contains the final year of data.
