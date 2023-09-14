@@ -20,8 +20,29 @@ to rank which performed best.
 | Support Vector Machines | 0.0102   |        |
 | Keras FFNN              | 1.55e-17 |        |
 | PyTorch FFNN            | 1.37e-19 |        |
-| PyTorch Lightning FFNN  | 7.82e-22 |   🏆   |
+| PyTorch Lightning FFNN  | 7.82e-22 |        |
+| PyTorch Lightning LSTM  | 1.10e-23 |   🏆   |
+| PyTorch Lightning RNN   | 1.30e-19 |        |
 | Tensorflow FFNN         | 5.43e-19 |        |
+
+pytorch rnn
+4.8946260605504565e-20 *
+2.9589609996837485e-25
+1.2575640313502546e-20
+6.7520280254838335e-18
+2.033395556886228e-24
+
+lstm
+8.963767130061894e-19
+8.267307619675679e-18
+6.344011273099739e-17
+2.045792852639951e-20
+9.231597532409241e-20
+
+sophisticated
+
+
+
 
 Precision p-value is the method for comparing performance.  Why precision?
 When investing, you care much more about the performance of the stocks you have purchased
