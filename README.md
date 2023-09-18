@@ -25,24 +25,6 @@ to rank which performed best.
 | PyTorch Lightning RNN   | 1.30e-19 |        |
 | Tensorflow FFNN         | 5.43e-19 |        |
 
-pytorch rnn
-4.8946260605504565e-20 *
-2.9589609996837485e-25
-1.2575640313502546e-20
-6.7520280254838335e-18
-2.033395556886228e-24
-
-lstm
-8.963767130061894e-19
-8.267307619675679e-18
-6.344011273099739e-17
-2.045792852639951e-20
-9.231597532409241e-20
-
-sophisticated
-
-
-
 
 Precision p-value is the method for comparing performance.  Why precision?
 When investing, you care much more about the performance of the stocks you have purchased
@@ -74,9 +56,9 @@ pip install -r requirements.txt
 ```
 
 ## About the Example Data
-The data provided in `example_data` is an example of what is provided by the D.AT platform.
+The data provided in `example_data` is an example of what is downloadable on the D.AT platform.
 
-This dataset encapsulates 5 years of stock data from the S&P 500, 
+This dataset encapsulates 5 years of price data of the companies comprising the S&P 500, 
 segmented into intervals of 30 trading days each. The data in each segment 
 has been normalized using a method where values are divided by the most 
 recent data point within the segment. Each row in the dataset represents a 
