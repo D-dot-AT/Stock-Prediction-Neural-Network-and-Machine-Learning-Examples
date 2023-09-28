@@ -21,22 +21,6 @@ from hyperparameter_tuning.load_data import load_data
 #
 ########################################################
 
-# loading data
-train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
-
-# Level to binarize our output.
-PREDICTION_THRESHOLD = 0.5
-
-# For stochastic methods such as training neural networks, results will vary.
-# if one hyperparameter configuration outperforms another, how do we know
-# this is not due to random variation?  One way to reduce this effect is to
-# re-run the process multiple times and pick the median performance.
-# This variable allows us to set how many times the process is re-run.
-# The larger this number, the more random performance variation is reduced.
-# However, the larger the number, the longer the execution time.
-# Set this to 1 to run each configuration only once.
-RERUN_COUNT = 1
-
 # Add to this! If there are more hyperparameter types you'd like to explore.
 LEARNING_RATE = 'Learning Rate'
 MAX_EPOCHS = 'Max Epochs'
@@ -58,6 +42,22 @@ hyperparameter_values = {
         [2, 1, 2, 1],
     ]
 }
+
+# loading data
+train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
+
+# Level to binarize our output.
+PREDICTION_THRESHOLD = 0.5
+
+# For stochastic methods such as training neural networks, results will vary.
+# if one hyperparameter configuration outperforms another, how do we know
+# this is not due to random variation?  One way to reduce this effect is to
+# re-run the process multiple times and pick the median performance.
+# This variable allows us to set how many times the process is re-run.
+# The larger this number, the more random performance variation is reduced.
+# However, the larger the number, the longer the execution time.
+# Set this to 1 to run each configuration only once.
+RERUN_COUNT = 1
 
 # calculating the total number of combinations of values
 total_combinations = reduce(mul, (len(values) for values in hyperparameter_values.values()))
