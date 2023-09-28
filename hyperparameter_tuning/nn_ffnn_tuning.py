@@ -1,8 +1,7 @@
 import csv
+import random
 import time
-from functools import reduce
 from itertools import product
-from operator import mul
 from statistics import median
 
 import pytorch_lightning as L
@@ -43,11 +42,13 @@ hyperparameter_values = {
     ]
 }
 
-# loading data
-train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
+# Do you want to explore all combinations or a randomly selected subset?
+# All combinations is known as "grid search", a randomly selected subset is known as "random search"
+EXPLORE_ALL_COMBINATIONS = True
 
-# Level to binarize our output.
-PREDICTION_THRESHOLD = 0.5
+# If we are doing a random search (you set `False` above)
+# then how many combinations do you want to try?
+NUMBER_OF_COMBINATIONS_TO_TRY = 20
 
 # For stochastic methods such as training neural networks, results will vary.
 # if one hyperparameter configuration outperforms another, how do we know
@@ -59,8 +60,22 @@ PREDICTION_THRESHOLD = 0.5
 # Set this to 1 to run each configuration only once.
 RERUN_COUNT = 1
 
-# calculating the total number of combinations of values
-total_combinations = reduce(mul, (len(values) for values in hyperparameter_values.values()))
+# loading data
+train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
+
+# Level to binarize our output.
+PREDICTION_THRESHOLD = 0.5
+
+# Generate all the combinations of hyperparameter values
+all_combinations = list(product(*hyperparameter_values.values()))
+
+# Grid search vs. Random search
+if EXPLORE_ALL_COMBINATIONS:
+    combinations_to_try = all_combinations
+else:
+    # Get a random subset of combinations
+    combinations_to_try = random.sample(all_combinations, min(NUMBER_OF_COMBINATIONS_TO_TRY, len(all_combinations)))
+
 
 # Returns a NN class based on a set of hyperparameters
 def neural_network(params):
@@ -136,7 +151,7 @@ def iterate_hyperparameters():
     iteration_count = 0
 
     # Loop through each combination of hyperparameters and evaluate them
-    for values in product(*hyperparameter_values.values()):
+    for values in combinations_to_try:
         # Create a dictionary with the current combination of values
         params = {key: value for key, value in zip(hyperparameter_values.keys(), values)}
 
@@ -151,7 +166,7 @@ def iterate_hyperparameters():
         result_dict.update({'p_value': p_value, 'execution_time': execution_time})
         results.append(result_dict)
 
-        print(f"Iteration: {iteration_count} of {total_combinations}")
+        print(f"Iteration: {iteration_count} of {len(combinations_to_try)}")
         print(f"Parameters: {params}")
         print(f"P-value: {p_value}")
 
