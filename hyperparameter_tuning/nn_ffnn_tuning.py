@@ -27,6 +27,7 @@ BATCH_SIZE = 'Batch Size'
 HIDDEN_LAYERS = 'HIDDEN_LAYERS'
 LOSS_FUNCTION = 'Loss Function'
 ACTIVATION_FUNCTION = 'Activation Function'
+OPTIMIZER = 'Optimizer'
 
 # Modify this!  Add all the possible values you want to explore.
 # A word of caution: due to the multiplicative nature of iterations,
@@ -47,11 +48,8 @@ hyperparameter_values = {
     LOSS_FUNCTION: [nn.HuberLoss],
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
     # ACTIVATION_FUNCTION: [nn.ReLU]  # nn.Tanh, nn.Sigmoid
-    ACTIVATION_FUNCTION: [nn.ELU, nn.Hardshrink, nn.Hardsigmoid, nn.Hardtanh, nn.Hardswish, nn.LeakyReLU, nn.LogSigmoid,
-                          nn.MultiheadAttention, nn.PReLU, nn.ReLU, nn.ReLU6, nn.RReLU, nn.SELU, nn.CELU, nn.GELU,
-                          nn.Sigmoid, nn.SiLU, nn.Mish, nn.Softplus, nn.Softshrink, nn.Softsign, nn.Tanh, nn.Tanhshrink,
-                          nn.Threshold, nn.GLU, nn.Softmin, nn.Softmax, nn.Softmax2d, nn.LogSoftmax,
-                          nn.AdaptiveLogSoftmaxWithLoss]
+    ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU,  nn.Tanh],
+    OPTIMIZER: ['Adam', 'SGD', 'RMSprop']
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -124,10 +122,19 @@ def neural_network(params):
             return loss
 
         def configure_optimizers(self):
-            return torch.optim.Adam(self.parameters(), lr=params[LEARNING_RATE])
+            optimizer = None
+            if params[OPTIMIZER] == 'Adam':
+                optimizer = torch.optim.Adam(self.parameters(), lr=params[LEARNING_RATE])
+            elif params[OPTIMIZER] == 'SGD':
+                # You might also want to parameterize 'momentum' and other args if using SGD
+                optimizer = torch.optim.SGD(self.parameters(), lr=params[LEARNING_RATE], momentum=0.9)
+            elif params[OPTIMIZER] == 'RMSprop':
+                optimizer = torch.optim.RMSprop(self.parameters(), lr=params[LEARNING_RATE])
+            else:
+                raise ValueError(f"Optimizer '{params[OPTIMIZER]}' not recognized")
+            return optimizer
 
     return SimpleNN
-
 
 
 def run_model(model_class, params):
@@ -206,7 +213,7 @@ def iterate_hyperparameters():
     sorted_results = sorted(results, key=lambda x: x['p_value'])
 
     # Saving the sorted results to a CSV file
-    with open('hyperparameter_results.csv', 'w', newline='') as csvfile:
+    with open('results/hyperparameter_results.csv', 'w', newline='') as csvfile:
         fieldnames = list(hyperparameter_values.keys()) + ['p_value', 'execution_time']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
