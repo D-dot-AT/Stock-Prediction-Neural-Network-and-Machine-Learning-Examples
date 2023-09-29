@@ -20,14 +20,17 @@ from hyperparameter_tuning.load_data import load_data
 #
 ########################################################
 
-# Add to this! If there are more hyperparameter types you'd like to explore.
+# Add to this if there are more hyperparameter types you'd like to explore.
 LEARNING_RATE = 'Learning Rate'
 MAX_EPOCHS = 'Max Epochs'
 BATCH_SIZE = 'Batch Size'
-HIDDEN_LAYERS = 'HIDDEN_LAYERS'
+HIDDEN_LAYERS = 'Hidden Layers'
 LOSS_FUNCTION = 'Loss Function'
 ACTIVATION_FUNCTION = 'Activation Function'
 OPTIMIZER = 'Optimizer'
+DROPOUT = 'Dropout'
+L1_REGULARIZATION = 'L1 Regularization'
+L2_REGULARIZATION = 'L2 Regularization'
 
 # Modify this!  Add all the possible values you want to explore.
 # A word of caution: due to the multiplicative nature of iterations,
@@ -49,7 +52,10 @@ hyperparameter_values = {
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
     # ACTIVATION_FUNCTION: [nn.ReLU]  # nn.Tanh, nn.Sigmoid
     ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU,  nn.Tanh],
-    OPTIMIZER: ['Adam', 'SGD', 'RMSprop']
+    OPTIMIZER: ['RMSprop'],  # OPTIMIZER: ['Adam', 'RMSprop'],
+    DROPOUT: [0, 0.2, 0.5],
+    L1_REGULARIZATION: [0, 0.01, 0.1],
+    L2_REGULARIZATION: [0, 0.01, 0.1]
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -101,17 +107,17 @@ def neural_network(params):
             self.layers = nn.ModuleList([nn.Linear(all_sizes[i], all_sizes[i + 1])
                                          for i in range(len(all_sizes) - 1)])
 
-            # Activation function from params
+            # Settings
             self.activation_function = params[ACTIVATION_FUNCTION]()
-
-            print(f'activation function: {ACTIVATION_FUNCTION}')
+            self.dropout = nn.Dropout(params[DROPOUT])
 
         def forward(self, x):
             x = x.type(self.layers[0].weight.dtype)
             for i, layer in enumerate(self.layers):
                 x = layer(x)
-                if i < len(self.layers) - 1:  # Only apply chosen activation to non-last layers
+                if i < len(self.layers) - 1:  # Only apply dropout and activation to non-last layers
                     x = self.activation_function(x)
+                    x = self.dropout(x)
             x = nn.Sigmoid()(x)  # Using Sigmoid for the output as I assume it's a binary classification
             return x
 
@@ -119,6 +125,13 @@ def neural_network(params):
             x, y = batch
             y_hat = self(x)
             loss = params[LOSS_FUNCTION]()(y_hat, y.view(-1, 1).float())
+
+            # L1 Regularization
+            l1_reg = 0.0
+            for param in self.parameters():
+                l1_reg += torch.norm(param, 1)
+            loss = loss + params[L1_REGULARIZATION] * l1_reg
+
             return loss
 
         def configure_optimizers(self):
@@ -132,6 +145,12 @@ def neural_network(params):
                 optimizer = torch.optim.RMSprop(self.parameters(), lr=params[LEARNING_RATE])
             else:
                 raise ValueError(f"Optimizer '{params[OPTIMIZER]}' not recognized")
+
+            # Add L2 regularization (weight decay) if optimizer is not AdamW (AdamW has its own weight decay handling)
+            if params[OPTIMIZER] != 'AdamW' and params[L2_REGULARIZATION] > 0:
+                for group in optimizer.param_groups:
+                    group['weight_decay'] = params[L2_REGULARIZATION]
+
             return optimizer
 
     return SimpleNN
