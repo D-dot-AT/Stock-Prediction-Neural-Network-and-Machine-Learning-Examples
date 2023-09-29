@@ -25,6 +25,8 @@ LEARNING_RATE = 'Learning Rate'
 MAX_EPOCHS = 'Max Epochs'
 BATCH_SIZE = 'Batch Size'
 HIDDEN_LAYERS = 'HIDDEN_LAYERS'
+LOSS_FUNCTION = 'Loss Function'
+ACTIVATION_FUNCTION = 'Activation Function'
 
 # Modify this!  Add all the possible values you want to explore.
 # A word of caution: due to the multiplicative nature of iterations,
@@ -34,12 +36,22 @@ hyperparameter_values = {
     MAX_EPOCHS: [8],
     BATCH_SIZE: [32],
     HIDDEN_LAYERS: [
-        [2],
-        [2, 3, 2, 1, 0.5],
+        # [2],
+        # [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, .25],
-        [2, 1.5, 1],
-        [2, 1, 2, 1],
-    ]
+        # [2, 1.5, 1],
+        # [2, 1, 2, 1],
+    ],
+    # https://pytorch.org/docs/stable/nn.html#loss-functions
+    # LOSS_FUNCTION: [nn.MSELoss, nn.SmoothL1Loss, nn.HuberLoss],
+    LOSS_FUNCTION: [nn.HuberLoss],
+    # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
+    # ACTIVATION_FUNCTION: [nn.ReLU]  # nn.Tanh, nn.Sigmoid
+    ACTIVATION_FUNCTION: [nn.ELU, nn.Hardshrink, nn.Hardsigmoid, nn.Hardtanh, nn.Hardswish, nn.LeakyReLU, nn.LogSigmoid,
+                          nn.MultiheadAttention, nn.PReLU, nn.ReLU, nn.ReLU6, nn.RReLU, nn.SELU, nn.CELU, nn.GELU,
+                          nn.Sigmoid, nn.SiLU, nn.Mish, nn.Softplus, nn.Softshrink, nn.Softsign, nn.Tanh, nn.Tanhshrink,
+                          nn.Threshold, nn.GLU, nn.Softmin, nn.Softmax, nn.Softmax2d, nn.LogSoftmax,
+                          nn.AdaptiveLogSoftmaxWithLoss]
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -90,27 +102,32 @@ def neural_network(params):
             all_sizes = [input_feature_size] + sizes + [1]
             self.layers = nn.ModuleList([nn.Linear(all_sizes[i], all_sizes[i + 1])
                                          for i in range(len(all_sizes) - 1)])
-            self.sigmoid = nn.Sigmoid()
+
+            # Activation function from params
+            self.activation_function = params[ACTIVATION_FUNCTION]()
+
+            print(f'activation function: {ACTIVATION_FUNCTION}')
 
         def forward(self, x):
             x = x.type(self.layers[0].weight.dtype)
             for i, layer in enumerate(self.layers):
                 x = layer(x)
-                if i < len(self.layers) - 1:  # Only apply ReLU to non-last layers
-                    x = nn.ReLU()(x)
-            x = self.sigmoid(x)
+                if i < len(self.layers) - 1:  # Only apply chosen activation to non-last layers
+                    x = self.activation_function(x)
+            x = nn.Sigmoid()(x)  # Using Sigmoid for the output as I assume it's a binary classification
             return x
 
         def training_step(self, batch, batch_idx):
             x, y = batch
             y_hat = self(x)
-            loss = nn.BCELoss()(y_hat, y.view(-1, 1).float())
+            loss = params[LOSS_FUNCTION]()(y_hat, y.view(-1, 1).float())
             return loss
 
         def configure_optimizers(self):
             return torch.optim.Adam(self.parameters(), lr=params[LEARNING_RATE])
 
     return SimpleNN
+
 
 
 def run_model(model_class, params):
@@ -146,29 +163,40 @@ def evaluate_hyperparameters(params):
 def iterate_hyperparameters():
     # Initialize an empty list to store the results
     results = []
+    errors = []
 
     # Tracking where we are in the exploration
     iteration_count = 0
 
     # Loop through each combination of hyperparameters and evaluate them
     for values in combinations_to_try:
+
         # Create a dictionary with the current combination of values
         params = {key: value for key, value in zip(hyperparameter_values.keys(), values)}
 
-        start_time = time.time()
-        p_value = evaluate_hyperparameters(params)
-        end_time = time.time()
-        execution_time = end_time - start_time
-        iteration_count += 1
+        try:
+            start_time = time.time()
+            p_value = evaluate_hyperparameters(params)
+            end_time = time.time()
+            execution_time = end_time - start_time
+            iteration_count += 1
 
-        # Storing the results in a dictionary
-        result_dict = params.copy()
-        result_dict.update({'p_value': p_value, 'execution_time': execution_time})
-        results.append(result_dict)
+            # Storing the results in a dictionary
+            result_dict = params.copy()
+            result_dict.update({'p_value': p_value, 'execution_time': execution_time})
+            results.append(result_dict)
 
-        print(f"Iteration: {iteration_count} of {len(combinations_to_try)}")
-        print(f"Parameters: {params}")
-        print(f"P-value: {p_value}")
+            print(f"Iteration: {iteration_count} of {len(combinations_to_try)}")
+            print(f"Parameters: {params}")
+            print(f"P-value: {p_value}")
+
+        # Some configurations may produce an error.
+        # This logs the error parameters allows the others to be tried
+        except Exception as err:
+            print(f"ERROR WITH PRAMS: {params}")
+            error_dict = params.copy()
+            error_dict.update({'error': str(err)})
+            errors.append(error_dict)
 
     # Finding the parameters that produced the lowest p-value
     best_result = min(results, key=lambda x: x['p_value'])
@@ -181,10 +209,17 @@ def iterate_hyperparameters():
     with open('hyperparameter_results.csv', 'w', newline='') as csvfile:
         fieldnames = list(hyperparameter_values.keys()) + ['p_value', 'execution_time']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
         writer.writeheader()
         for result in sorted_results:
             writer.writerow(result)
+
+    # If any errors occurred, record those
+    with open('errors.csv', 'w', newline='') as errorFile:
+        fieldnames = list(hyperparameter_values.keys()) + ['error']
+        writer = csv.DictWriter(errorFile, fieldnames=fieldnames)
+        writer.writeheader()
+        for error in errors:
+            writer.writerow(error)
 
 
 # running the iterations
