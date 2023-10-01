@@ -1,5 +1,5 @@
 import csv
-import itertools
+import logging
 import random
 import time
 from itertools import product
@@ -42,11 +42,8 @@ hyperparameter_values = {
     MAX_EPOCHS: [8],
     BATCH_SIZE: [32, 64],
     HIDDEN_LAYERS: [
-        # [2],
         [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, .25],
-        # [2, 1.5, 1],
-        # [2, 1, 2, 1],
     ],
     # https://pytorch.org/docs/stable/nn.html#loss-functions
     LOSS_FUNCTION: [nn.SmoothL1Loss],
@@ -59,7 +56,7 @@ hyperparameter_values = {
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
-# All combinations is known as "grid search", a randomly selected subset is known as "random search"
+# Searching all combinations is known as "grid search", a randomly selected subset is known as "random search"
 EXPLORE_ALL_COMBINATIONS = True
 
 # If we are doing a random search (you set `False` above)
@@ -78,6 +75,9 @@ RERUN_COUNT = 1
 
 # The number of CPUs to dedicate to this.  Minimum 1
 CPU_COUNT = cpu_count()
+
+# keeping output from being so verbose
+logging.getLogger("pytorch_lightning").setLevel(logging.ERROR)
 
 # loading data
 train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
