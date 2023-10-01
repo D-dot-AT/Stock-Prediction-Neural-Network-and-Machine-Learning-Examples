@@ -1,7 +1,9 @@
 import csv
+import itertools
 import random
 import time
 from itertools import product
+from multiprocessing import Pool, cpu_count
 from statistics import median
 
 import pytorch_lightning as L
@@ -36,26 +38,24 @@ L2_REGULARIZATION = 'L2 Regularization'
 # A word of caution: due to the multiplicative nature of iterations,
 # each added value can significantly increase execution time.
 hyperparameter_values = {
-    LEARNING_RATE: [0.001],
+    LEARNING_RATE: [0.0005],
     MAX_EPOCHS: [8],
-    BATCH_SIZE: [32],
+    BATCH_SIZE: [32, 64],
     HIDDEN_LAYERS: [
         # [2],
-        # [2, 3, 2, 1, 0.5],
+        [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, .25],
         # [2, 1.5, 1],
         # [2, 1, 2, 1],
     ],
     # https://pytorch.org/docs/stable/nn.html#loss-functions
-    # LOSS_FUNCTION: [nn.MSELoss, nn.SmoothL1Loss, nn.HuberLoss],
-    LOSS_FUNCTION: [nn.HuberLoss],
+    LOSS_FUNCTION: [nn.SmoothL1Loss],
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
-    # ACTIVATION_FUNCTION: [nn.ReLU]  # nn.Tanh, nn.Sigmoid
-    ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU,  nn.Tanh],
-    OPTIMIZER: ['RMSprop'],  # OPTIMIZER: ['Adam', 'RMSprop'],
-    DROPOUT: [0, 0.2, 0.5],
-    L1_REGULARIZATION: [0, 0.01, 0.1],
-    L2_REGULARIZATION: [0, 0.01, 0.1]
+    ACTIVATION_FUNCTION: [nn.LeakyReLU],
+    OPTIMIZER: ['Adam'],
+    DROPOUT: [0.2],
+    L1_REGULARIZATION: [0],  # [0, 0.01, 0.1],
+    L2_REGULARIZATION: [0],  # [0, 0.01, 0.1],
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -75,6 +75,9 @@ NUMBER_OF_COMBINATIONS_TO_TRY = 20
 # However, the larger the number, the longer the execution time.
 # Set this to 1 to run each configuration only once.
 RERUN_COUNT = 1
+
+# The number of CPUs to dedicate to this.  Minimum 1
+CPU_COUNT = cpu_count()
 
 # loading data
 train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
@@ -186,43 +189,46 @@ def evaluate_hyperparameters(params):
     return median(p_values)
 
 
+def evaluate_wrapper(args):
+    iteration, values = args
+
+    # converting tuples to dict
+    params = {key: value for key, value in zip(hyperparameter_values.keys(), values)}
+
+    try:
+        start_time = time.time()
+        p_value = evaluate_hyperparameters(params)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Iteration: {iteration} of {len(combinations_to_try)}")
+        print(f"Parameters: {params}")
+        print(f"P-value: {p_value}")
+        return params, p_value, execution_time, None
+    except Exception as err:
+        print(f"ERROR WITH PRAMS: {params}")
+        return params, None, None, str(err)
+
+
 def iterate_hyperparameters():
-    # Initialize an empty list to store the results
+    # Initialize lists to store the results and errors
     results = []
     errors = []
 
-    # Tracking where we are in the exploration
-    iteration_count = 0
+    # Setting pools across our CPUs
+    pool = Pool(CPU_COUNT)
 
-    # Loop through each combination of hyperparameters and evaluate them
-    for values in combinations_to_try:
+    # Enumerate the combinations to track the iteration number
+    params_with_iter = list(enumerate(combinations_to_try, 1))
 
-        # Create a dictionary with the current combination of values
-        params = {key: value for key, value in zip(hyperparameter_values.keys(), values)}
+    # Using Pool to parallelize
+    for params, p_value, execution_time, error in list(pool.map(evaluate_wrapper, params_with_iter)):
 
-        try:
-            start_time = time.time()
-            p_value = evaluate_hyperparameters(params)
-            end_time = time.time()
-            execution_time = end_time - start_time
-            iteration_count += 1
-
-            # Storing the results in a dictionary
-            result_dict = params.copy()
-            result_dict.update({'p_value': p_value, 'execution_time': execution_time})
-            results.append(result_dict)
-
-            print(f"Iteration: {iteration_count} of {len(combinations_to_try)}")
-            print(f"Parameters: {params}")
-            print(f"P-value: {p_value}")
-
-        # Some configurations may produce an error.
-        # This logs the error parameters allows the others to be tried
-        except Exception as err:
-            print(f"ERROR WITH PRAMS: {params}")
-            error_dict = params.copy()
-            error_dict.update({'error': str(err)})
-            errors.append(error_dict)
+        if error is None:
+            params.update({'p_value': p_value, 'execution_time': execution_time})
+            results.append(params)
+        else:
+            params.update({'error': error})
+            errors.append(params)
 
     # Finding the parameters that produced the lowest p-value
     best_result = min(results, key=lambda x: x['p_value'])
@@ -240,13 +246,21 @@ def iterate_hyperparameters():
             writer.writerow(result)
 
     # If any errors occurred, record those
-    with open('errors.csv', 'w', newline='') as errorFile:
-        fieldnames = list(hyperparameter_values.keys()) + ['error']
-        writer = csv.DictWriter(errorFile, fieldnames=fieldnames)
-        writer.writeheader()
-        for error in errors:
-            writer.writerow(error)
+    if len(errors) > 0:
+        with open('results/errors.csv', 'w', newline='') as errorFile:
+            fieldnames = list(hyperparameter_values.keys()) + ['error']
+            writer = csv.DictWriter(errorFile, fieldnames=fieldnames)
+            writer.writeheader()
+            for error in errors:
+                writer.writerow(error)
+
+    # Close the pool
+    pool.close()
+    pool.join()
 
 
 # running the iterations
-iterate_hyperparameters()
+if __name__ == '__main__':
+    # running the iterations
+    iterate_hyperparameters()
+
