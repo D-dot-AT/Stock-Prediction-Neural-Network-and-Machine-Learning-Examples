@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader
 
 from common import calculate_precision_p_value
 from hyperparameter_tuning.load_data import load_data
+from hyperparameter_tuning.nn_components import OPTIMIZER_CLASSES
 
 ########################################################
 #
@@ -22,7 +23,6 @@ from hyperparameter_tuning.load_data import load_data
 #
 ########################################################
 
-# Add to this if there are more hyperparameter types you'd like to explore.
 LEARNING_RATE = 'Learning Rate'
 MAX_EPOCHS = 'Max Epochs'
 BATCH_SIZE = 'Batch Size'
@@ -38,7 +38,7 @@ L2_REGULARIZATION = 'L2 Regularization'
 # A word of caution: due to the multiplicative nature of iterations,
 # each added value can significantly increase execution time.
 hyperparameter_values = {
-    LEARNING_RATE: [0.0005],
+    LEARNING_RATE: [0.001, 0.0005],
     MAX_EPOCHS: [8],
     BATCH_SIZE: [32, 64],
     HIDDEN_LAYERS: [
@@ -46,11 +46,11 @@ hyperparameter_values = {
         [2, 3, 2, 1, 0.5, .25],
     ],
     # https://pytorch.org/docs/stable/nn.html#loss-functions
-    LOSS_FUNCTION: [nn.SmoothL1Loss],
+    LOSS_FUNCTION: [nn.MSELoss, nn.SmoothL1Loss, nn.HuberLoss],
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
-    ACTIVATION_FUNCTION: [nn.LeakyReLU],
-    OPTIMIZER: ['Adam'],
-    DROPOUT: [0.2],
+    ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU,  nn.Tanh],
+    OPTIMIZER: ['Adam', 'RMSprop'],
+    DROPOUT: [0, 0.2, 0.5],
     L1_REGULARIZATION: [0],  # [0, 0.01, 0.1],
     L2_REGULARIZATION: [0],  # [0, 0.01, 0.1],
 }
@@ -71,7 +71,7 @@ NUMBER_OF_COMBINATIONS_TO_TRY = 20
 # The larger this number, the more random performance variation is reduced.
 # However, the larger the number, the longer the execution time.
 # Set this to 1 to run each configuration only once.
-RERUN_COUNT = 1
+RERUN_COUNT = 3
 
 # The number of CPUs to dedicate to this.  Minimum 1
 CPU_COUNT = cpu_count()
@@ -138,19 +138,14 @@ def neural_network(params):
             return loss
 
         def configure_optimizers(self):
-            optimizer = None
-            if params[OPTIMIZER] == 'Adam':
-                optimizer = torch.optim.Adam(self.parameters(), lr=params[LEARNING_RATE])
-            elif params[OPTIMIZER] == 'SGD':
-                # You might also want to parameterize 'momentum' and other args if using SGD
-                optimizer = torch.optim.SGD(self.parameters(), lr=params[LEARNING_RATE], momentum=0.9)
-            elif params[OPTIMIZER] == 'RMSprop':
-                optimizer = torch.optim.RMSprop(self.parameters(), lr=params[LEARNING_RATE])
-            else:
+            optimizer_class = OPTIMIZER_CLASSES.get(params[OPTIMIZER])
+            if optimizer_class is None:
                 raise ValueError(f"Optimizer '{params[OPTIMIZER]}' not recognized")
 
-            # Add L2 regularization (weight decay) if optimizer is not AdamW (AdamW has its own weight decay handling)
-            if params[OPTIMIZER] != 'AdamW' and params[L2_REGULARIZATION] > 0:
+            optimizer = optimizer_class(self.parameters(), lr=params[LEARNING_RATE])
+
+            # If optimizer has its own L2 regularization handling, skip. For instance, AdamW.
+            if params[OPTIMIZER] not in ['AdamW'] and params[L2_REGULARIZATION] > 0:
                 for group in optimizer.param_groups:
                     group['weight_decay'] = params[L2_REGULARIZATION]
 

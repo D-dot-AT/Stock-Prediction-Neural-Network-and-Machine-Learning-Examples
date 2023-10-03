@@ -1,4 +1,13 @@
-from torch import nn
+from torch import nn, optim
+
+
+OPTIMIZER_CLASSES = {
+    'Adam': optim.Adam,
+    'SGD': optim.SGD,
+    'RMSprop': optim.RMSprop,
+    'AdamW': optim.AdamW,
+    # ... add any other optimizers you want to consider
+}
 
 ACTIVATION_FUNCTIONS_ALL = [nn.ELU, nn.Hardshrink, nn.Hardsigmoid, nn.Hardtanh, nn.Hardswish, nn.LeakyReLU,
                             nn.LogSigmoid, nn.MultiheadAttention, nn.PReLU, nn.ReLU, nn.ReLU6, nn.RReLU, nn.SELU,
