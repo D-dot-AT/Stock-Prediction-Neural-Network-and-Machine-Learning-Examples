@@ -12,17 +12,11 @@ from sklearn.metrics import confusion_matrix
 from torch import nn
 from torch.utils.data import DataLoader
 
-from common import calculate_precision_p_value
+from common import calculate_precision_p_value, PREDICTION_THRESHOLD
 from hyperparameter_tuning.load_data import load_data
 from hyperparameter_tuning.nn_components import OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS
 
-########################################################
-#
-# Parallelization
-# Extensibility for hyperparameter types
-#
-########################################################
-
+# Hyperparameters Explored
 LEARNING_RATE = 'Learning Rate'
 MAX_EPOCHS = 'Max Epochs'
 BATCH_SIZE = 'Batch Size'
@@ -39,21 +33,22 @@ WEIGHT_INITIALIZATION = 'Weight Initialization'
 # A word of caution: due to the multiplicative nature of iterations,
 # each added value can significantly increase execution time.
 hyperparameter_values = {
-    LEARNING_RATE: [0.0005],
+    LEARNING_RATE: [0.001, 0.0005],
     MAX_EPOCHS: [8],
-    BATCH_SIZE: [64],
+    BATCH_SIZE: [32, 64],
     HIDDEN_LAYERS: [
+        [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, .25],
     ],
     # https://pytorch.org/docs/stable/nn.html#loss-functions
-    LOSS_FUNCTION: [nn.SmoothL1Loss],
+    LOSS_FUNCTION: [nn.MSELoss, nn.SmoothL1Loss, nn.HuberLoss],
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
-    ACTIVATION_FUNCTION: [nn.LeakyReLU],
-    OPTIMIZER: ['Adam'],
-    DROPOUT: [0],
+    ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU, nn.Tanh],
+    OPTIMIZER: ['Adam', 'RMSprop'],
+    DROPOUT: [0, 0.2, 0.5],
     L1_REGULARIZATION: [0],  # [0, 0.01, 0.1],
     L2_REGULARIZATION: [0],  # [0, 0.01, 0.1],
-    WEIGHT_INITIALIZATION: list(WEIGHT_INITIALIZATIONS.keys())
+    WEIGHT_INITIALIZATION: ['xavier_uniform']
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -62,7 +57,7 @@ EXPLORE_ALL_COMBINATIONS = True
 
 # If we are doing a random search (you set `False` above)
 # then how many combinations do you want to try?
-NUMBER_OF_COMBINATIONS_TO_TRY = 20
+NUMBER_OF_COMBINATIONS_TO_TRY = 100
 
 # For stochastic methods such as training neural networks, results will vary.
 # if one hyperparameter configuration outperforms another, how do we know
@@ -72,7 +67,7 @@ NUMBER_OF_COMBINATIONS_TO_TRY = 20
 # The larger this number, the more random performance variation is reduced.
 # However, the larger the number, the longer the execution time.
 # Set this to 1 to run each configuration only once.
-RERUN_COUNT = 3
+RERUN_COUNT = 5
 
 # The number of CPUs to dedicate to this.  Minimum 1
 CPU_COUNT = cpu_count()
@@ -82,9 +77,6 @@ logging.getLogger("pytorch_lightning").setLevel(logging.ERROR)
 
 # loading data
 train_dataset, X_test_scaled, Y_test, input_feature_size = load_data()
-
-# Level to binarize our output.
-PREDICTION_THRESHOLD = 0.5
 
 # Generate all the combinations of hyperparameter values
 all_combinations = list(product(*hyperparameter_values.values()))
@@ -169,7 +161,7 @@ def run_model(model_class, params):
 
     train_loader = DataLoader(train_dataset, batch_size=params[BATCH_SIZE])
 
-    trainer = L.Trainer(max_epochs=params[MAX_EPOCHS])
+    trainer = L.Trainer(max_epochs=params[MAX_EPOCHS], logger=False)
     trainer.fit(model, train_loader)
 
     model.eval()

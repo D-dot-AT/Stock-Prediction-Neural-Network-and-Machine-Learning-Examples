@@ -1,5 +1,7 @@
 from scipy.stats import fisher_exact
 
+# Level to binarize our output.
+PREDICTION_THRESHOLD = 0.5
 
 def print_statistics(tp: int, fp: int, fn: int, tn: int):
     # Step 5: Statistical Analysis
