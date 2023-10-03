@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 
 from common import calculate_precision_p_value
 from hyperparameter_tuning.load_data import load_data
-from hyperparameter_tuning.nn_components import OPTIMIZER_CLASSES
+from hyperparameter_tuning.nn_components import OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS
 
 ########################################################
 #
@@ -33,26 +33,27 @@ OPTIMIZER = 'Optimizer'
 DROPOUT = 'Dropout'
 L1_REGULARIZATION = 'L1 Regularization'
 L2_REGULARIZATION = 'L2 Regularization'
+WEIGHT_INITIALIZATION = 'Weight Initialization'
 
 # Modify this!  Add all the possible values you want to explore.
 # A word of caution: due to the multiplicative nature of iterations,
 # each added value can significantly increase execution time.
 hyperparameter_values = {
-    LEARNING_RATE: [0.001, 0.0005],
+    LEARNING_RATE: [0.0005],
     MAX_EPOCHS: [8],
-    BATCH_SIZE: [32, 64],
+    BATCH_SIZE: [64],
     HIDDEN_LAYERS: [
-        [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, .25],
     ],
     # https://pytorch.org/docs/stable/nn.html#loss-functions
-    LOSS_FUNCTION: [nn.MSELoss, nn.SmoothL1Loss, nn.HuberLoss],
+    LOSS_FUNCTION: [nn.SmoothL1Loss],
     # https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
-    ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU,  nn.Tanh],
-    OPTIMIZER: ['Adam', 'RMSprop'],
-    DROPOUT: [0, 0.2, 0.5],
+    ACTIVATION_FUNCTION: [nn.LeakyReLU],
+    OPTIMIZER: ['Adam'],
+    DROPOUT: [0],
     L1_REGULARIZATION: [0],  # [0, 0.01, 0.1],
     L2_REGULARIZATION: [0],  # [0, 0.01, 0.1],
+    WEIGHT_INITIALIZATION: list(WEIGHT_INITIALIZATIONS.keys())
 }
 
 # Do you want to explore all combinations or a randomly selected subset?
@@ -113,6 +114,15 @@ def neural_network(params):
             # Settings
             self.activation_function = params[ACTIVATION_FUNCTION]()
             self.dropout = nn.Dropout(params[DROPOUT])
+            self.init_weights()
+
+        def init_weights(self):
+            init_func = WEIGHT_INITIALIZATIONS.get(params[WEIGHT_INITIALIZATION])
+            if init_func is None:
+                raise ValueError(f"Weight initialization '{params[WEIGHT_INITIALIZATION]}' not recognized")
+
+            for layer in self.layers:
+                init_func(layer.weight)
 
         def forward(self, x):
             x = x.type(self.layers[0].weight.dtype)
