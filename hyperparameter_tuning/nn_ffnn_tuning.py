@@ -258,6 +258,5 @@ def iterate_hyperparameters():
 
 # running the iterations
 if __name__ == '__main__':
-    # running the iterations
     iterate_hyperparameters()
 

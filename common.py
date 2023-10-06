@@ -24,6 +24,9 @@ def print_statistics(tp: int, fp: int, fn: int, tn: int):
 
 
 def calculate_precision_p_value(tp: int, fp: int, fn: int, tn: int):
+    # if the prediction precision is lower than the overall rate, return 1.0
+    if (tp / (tp + fp)) < ((fn + tp) / (tp + fp + tn + fn)):
+        return 1.0
     contingency_table = [[tp, tp + fp], [fn + tp, tp + fp + tn + fn]]
     _, p_value = fisher_exact(contingency_table)
     return p_value
