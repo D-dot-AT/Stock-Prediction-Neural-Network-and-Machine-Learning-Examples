@@ -11,6 +11,9 @@ hyperparameter_values = {
     Hyper.LEARNING_RATE: [0.001, 0.0005],
     Hyper.MAX_EPOCHS: [8],
     Hyper.BATCH_SIZE: [32, 64],
+    # Hidden layers are defined as lists of numbers, where each number is a multiple of the number of
+    # the number of nodes in the input layer.  For example, if we have 30 input nodes and one of
+    # our layer lists is [2, 1, 0.5], that will produce hidden layers of size 60, 30, 15.
     Hyper.HIDDEN_LAYERS: [
         [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, 0.25],
