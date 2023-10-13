@@ -9,7 +9,6 @@ from statistics import median
 import pytorch_lightning as L
 import torch
 from sklearn.metrics import confusion_matrix
-from torch import nn
 from torch.utils.data import DataLoader
 
 from common import calculate_precision_p_value, PREDICTION_THRESHOLD
@@ -17,7 +16,6 @@ from hyperparameter_tuning.config import Hyper, hyperparameter_values, EXPLORE_A
     NUMBER_OF_COMBINATIONS_TO_TRY, CPU_COUNT, RERUN_COUNT
 from hyperparameter_tuning.get_ffnn import get_ffnn
 from hyperparameter_tuning.load_data import load_data
-from hyperparameter_tuning.nn_constants import OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS, LOSS_FUNCTIONS
 
 # Reducing verbosity of output
 logging.getLogger("pytorch_lightning").setLevel(logging.ERROR)

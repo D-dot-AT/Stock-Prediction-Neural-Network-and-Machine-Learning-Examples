@@ -8,3 +8,4 @@ lightning_logs
 hyperparameter_results.csv
 hyperparameter_tuning/results
 errors.csv
+checkpoints

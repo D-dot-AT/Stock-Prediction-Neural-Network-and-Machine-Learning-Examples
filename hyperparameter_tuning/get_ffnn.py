@@ -2,8 +2,7 @@ import pytorch_lightning as L
 import torch
 from torch import nn
 
-from hyperparameter_tuning.config import Hyper
-from hyperparameter_tuning.nn_constants import OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS, LOSS_FUNCTIONS, \
+from hyperparameter_tuning.nn_constants import Hyper, OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS, LOSS_FUNCTIONS, \
     ACTIVATION_FUNCTIONS
 
 
