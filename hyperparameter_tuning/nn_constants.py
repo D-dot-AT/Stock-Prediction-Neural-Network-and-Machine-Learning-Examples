@@ -17,6 +17,8 @@ class Hyper(Enum):
     L1_REGULARIZATION = 'L1 Regularization'
     L2_REGULARIZATION = 'L2 Regularization'
     WEIGHT_INITIALIZATION = 'Weight Initialization'
+    LSTM_NUMBER_OF_LAYERS = 'Number of Layers'
+    LSTM_HIDDEN_LAYER_SIZE = 'Hidden Layer Size'
 
 
 # Define an enum for optimizer keys
@@ -49,17 +51,102 @@ OPTIMIZER_CLASSES = {
 }
 
 
-ACTIVATION_FUNCTIONS_ALL = [nn.ELU, nn.Hardshrink, nn.Hardsigmoid, nn.Hardtanh, nn.Hardswish, nn.LeakyReLU,
-                            nn.LogSigmoid, nn.MultiheadAttention, nn.PReLU, nn.ReLU, nn.ReLU6, nn.RReLU, nn.SELU,
-                            nn.CELU, nn.GELU, nn.Sigmoid, nn.SiLU, nn.Mish, nn.Softplus, nn.Softshrink, nn.Softsign,
-                            nn.Tanh, nn.Tanhshrink, nn.Threshold, nn.GLU, nn.Softmin, nn.Softmax, nn.Softmax2d,
-                            nn.LogSoftmax, nn.AdaptiveLogSoftmaxWithLoss]
+class ActivationFunction(Enum):
+    ELU = "ELU"
+    Hardshrink = "Hardshrink"
+    Hardsigmoid = "Hardsigmoid"
+    Hardtanh = "Hardtanh"
+    Hardswish = "Hardswish"
+    LeakyReLU = "LeakyReLU"
+    LogSigmoid = "LogSigmoid"
+    MultiheadAttention = "MultiheadAttention"
+    PReLU = "PReLU"
+    ReLU = "ReLU"
+    ReLU6 = "ReLU6"
+    RReLU = "RReLU"
+    SELU = "SELU"
+    CELU = "CELU"
+    GELU = "GELU"
+    Sigmoid = "Sigmoid"
+    SiLU = "SiLU"
+    Mish = "Mish"
+    Softplus = "Softplus"
+    Softshrink = "Softshrink"
+    Softsign = "Softsign"
+    Tanh = "Tanh"
+    Tanhshrink = "Tanhshrink"
+    Threshold = "Threshold"
+    GLU = "GLU"
+    Softmin = "Softmin"
+    Softmax = "Softmax"
+    Softmax2d = "Softmax2d"
+    LogSoftmax = "LogSoftmax"
+    AdaptiveLogSoftmaxWithLoss = "AdaptiveLogSoftmaxWithLoss"
+
+
+ACTIVATION_FUNCTIONS = {
+    ActivationFunction.ELU: nn.ELU,
+    ActivationFunction.Hardshrink: nn.Hardshrink,
+    ActivationFunction.Hardsigmoid: nn.Hardsigmoid,
+    ActivationFunction.Hardtanh: nn.Hardtanh,
+    ActivationFunction.Hardswish: nn.Hardswish,
+    ActivationFunction.LeakyReLU: nn.LeakyReLU,
+    ActivationFunction.LogSigmoid: nn.LogSigmoid,
+    ActivationFunction.MultiheadAttention: nn.MultiheadAttention,
+    ActivationFunction.PReLU: nn.PReLU,
+    ActivationFunction.ReLU: nn.ReLU,
+    ActivationFunction.ReLU6: nn.ReLU6,
+    ActivationFunction.RReLU: nn.RReLU,
+    ActivationFunction.SELU: nn.SELU,
+    ActivationFunction.CELU: nn.CELU,
+    ActivationFunction.GELU: nn.GELU,
+    ActivationFunction.Sigmoid: nn.Sigmoid,
+    ActivationFunction.SiLU: nn.SiLU,
+    ActivationFunction.Mish: nn.Mish,
+    ActivationFunction.Softplus: nn.Softplus,
+    ActivationFunction.Softshrink: nn.Softshrink,
+    ActivationFunction.Softsign: nn.Softsign,
+    ActivationFunction.Tanh: nn.Tanh,
+    ActivationFunction.Tanhshrink: nn.Tanhshrink,
+    ActivationFunction.Threshold: nn.Threshold,
+    ActivationFunction.GLU: nn.GLU,
+    ActivationFunction.Softmin: nn.Softmin,
+    ActivationFunction.Softmax: nn.Softmax,
+    ActivationFunction.Softmax2d: nn.Softmax2d,
+    ActivationFunction.LogSoftmax: nn.LogSoftmax,
+    ActivationFunction.AdaptiveLogSoftmaxWithLoss: nn.AdaptiveLogSoftmaxWithLoss
+}
+
 
 # The single-node classifications NN we are building works with these activation functions
-ACTIVATION_FUNCTIONS_WORKING = [nn.ELU, nn.Hardshrink, nn.Hardsigmoid, nn.Hardtanh, nn.Hardswish, nn.LeakyReLU,
-                                nn.LogSigmoid, nn.PReLU, nn.ReLU, nn.ReLU6, nn.RReLU, nn.SELU, nn.CELU, nn.GELU,
-                                nn.Sigmoid, nn.SiLU, nn.Mish, nn.Softplus, nn.Softshrink, nn.Softsign, nn.Tanh,
-                                nn.Tanhshrink, nn.Softmin, nn.Softmax, nn.LogSoftmax]
+ACTIVATION_FUNCTIONS_WORKING_ENUMS = [
+    ActivationFunction.ELU,
+    ActivationFunction.Hardshrink,
+    ActivationFunction.Hardsigmoid,
+    ActivationFunction.Hardtanh,
+    ActivationFunction.Hardswish,
+    ActivationFunction.LeakyReLU,
+    ActivationFunction.LogSigmoid,
+    ActivationFunction.PReLU,
+    ActivationFunction.ReLU,
+    ActivationFunction.ReLU6,
+    ActivationFunction.RReLU,
+    ActivationFunction.SELU,
+    ActivationFunction.CELU,
+    ActivationFunction.GELU,
+    ActivationFunction.Sigmoid,
+    ActivationFunction.SiLU,
+    ActivationFunction.Mish,
+    ActivationFunction.Softplus,
+    ActivationFunction.Softshrink,
+    ActivationFunction.Softsign,
+    ActivationFunction.Tanh,
+    ActivationFunction.Tanhshrink,
+    ActivationFunction.Softmin,
+    ActivationFunction.Softmax,
+    ActivationFunction.LogSoftmax
+]
+
 
 
 # Define an enum for weight initialization keys

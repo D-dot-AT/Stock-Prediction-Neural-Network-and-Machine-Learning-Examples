@@ -1,8 +1,7 @@
 from multiprocessing import cpu_count
 
-from torch import nn
-
-from hyperparameter_tuning.nn_constants import Hyper, WeightInit, Optimizer, LossFunction
+from hyperparameter_tuning.nn_constants import Hyper, WeightInit as Wi, Optimizer as O, LossFunction as Lf, \
+    ActivationFunction as Af
 
 # Modify this! Add all the possible values you want to explore.
 # A word of caution: due to the multiplicative nature of iterations,
@@ -18,13 +17,13 @@ hyperparameter_values = {
         [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, 0.25],
     ],
-    Hyper.LOSS_FUNCTION: [LossFunction.MSE, LossFunction.SMOOTH_L1, LossFunction.HUBER],
-    Hyper.ACTIVATION_FUNCTION: [nn.LeakyReLU, nn.PReLU, nn.ReLU, nn.Tanh],
-    Hyper.OPTIMIZER: [Optimizer.ADAM, Optimizer.RMSPROP],
+    Hyper.LOSS_FUNCTION: [Lf.MSE, Lf.SMOOTH_L1, Lf.HUBER],
+    Hyper.ACTIVATION_FUNCTION: [Af.LeakyReLU, Af.PReLU, Af.ReLU, Af.Tanh],
+    Hyper.OPTIMIZER: [O.ADAM, O.RMSPROP],
     Hyper.DROPOUT: [0, 0.2, 0.5],
     Hyper.L1_REGULARIZATION: [0],  # [0, 0.01, 0.1],
     Hyper.L2_REGULARIZATION: [0],  # [0, 0.01, 0.1],
-    Hyper.WEIGHT_INITIALIZATION: [WeightInit.XAVIER_UNIFORM, WeightInit.XAVIER_NORMAL]
+    Hyper.WEIGHT_INITIALIZATION: [Wi.XAVIER_UNIFORM, Wi.XAVIER_NORMAL]
 }
 
 # Do you want to explore all combinations or a randomly selected subset?

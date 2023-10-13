@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 from common import calculate_precision_p_value, PREDICTION_THRESHOLD
 from hyperparameter_tuning.config import Hyper, hyperparameter_values, EXPLORE_ALL_COMBINATIONS, \
     NUMBER_OF_COMBINATIONS_TO_TRY, CPU_COUNT, RERUN_COUNT
+from hyperparameter_tuning.get_ffnn import get_ffnn
 from hyperparameter_tuning.load_data import load_data
 from hyperparameter_tuning.nn_constants import OPTIMIZER_CLASSES, WEIGHT_INITIALIZATIONS, LOSS_FUNCTIONS
 
@@ -33,69 +34,6 @@ if EXPLORE_ALL_COMBINATIONS:
 else:
     # Get a random subset of combinations
     combinations_to_try = random.sample(all_combinations, min(NUMBER_OF_COMBINATIONS_TO_TRY, len(all_combinations)))
-
-
-# Returns a NN class based on a set of hyperparameters
-def neural_network(params):
-    class SimpleNN(L.LightningModule):
-        def __init__(self):
-            super().__init__()
-
-            # Calculate hidden layer sizes
-            sizes = [int(round(input_feature_size * h)) for h in params[Hyper.HIDDEN_LAYERS]]
-
-            # Dynamically build layers
-            all_sizes = [input_feature_size] + sizes + [1]
-            self.layers = nn.ModuleList([nn.Linear(all_sizes[i], all_sizes[i + 1])
-                                         for i in range(len(all_sizes) - 1)])
-
-            # Settings
-            self.activation_function = params[Hyper.ACTIVATION_FUNCTION]()
-            self.dropout = nn.Dropout(params[Hyper.DROPOUT])
-            self.init_weights()
-
-        def init_weights(self):
-            init_func = WEIGHT_INITIALIZATIONS.get(params[Hyper.WEIGHT_INITIALIZATION])
-            for layer in self.layers:
-                init_func(layer.weight)
-
-        def forward(self, x):
-            x = x.type(self.layers[0].weight.dtype)
-            for i, layer in enumerate(self.layers):
-                x = layer(x)
-                if i < len(self.layers) - 1:  # Only apply dropout and activation to non-last layers
-                    x = self.activation_function(x)
-                    x = self.dropout(x)
-            x = nn.Sigmoid()(x)  # Using Sigmoid for the output as I assume it's a binary classification
-            return x
-
-        def training_step(self, batch, batch_idx):
-            x, y = batch
-            y_hat = self(x)
-            loss_function = LOSS_FUNCTIONS[params[Hyper.LOSS_FUNCTION]]
-            loss = loss_function()(y_hat, y.view(-1, 1).float())
-
-            # L1 Regularization
-            l1_reg = 0.0
-            for param in self.parameters():
-                l1_reg += torch.norm(param, 1)
-            loss = loss + params[Hyper.L1_REGULARIZATION] * l1_reg
-
-            return loss
-
-        def configure_optimizers(self):
-            optimizer_class = OPTIMIZER_CLASSES[params[Hyper.OPTIMIZER]]
-            print(f"optimizer_class: {optimizer_class}")
-            optimizer = optimizer_class(self.parameters(), lr=params[Hyper.LEARNING_RATE])
-
-            # If optimizer has its own L2 regularization handling, skip. For instance, AdamW.
-            if params[Hyper.OPTIMIZER] not in ['AdamW'] and params[Hyper.L2_REGULARIZATION] > 0:
-                for group in optimizer.param_groups:
-                    group['weight_decay'] = params[Hyper.L2_REGULARIZATION]
-
-            return optimizer
-
-    return SimpleNN
 
 
 def run_model(model_class, params):
@@ -125,23 +63,23 @@ def evaluate_wrapper(args):
     # converting tuples to dict
     params = {key: value for key, value in zip(hyperparameter_values.keys(), values)}
 
-    # try:
-    start_time = time.time()
-    model_class = neural_network(params)
+    try:
+        start_time = time.time()
+        model_class = get_ffnn(params, input_feature_size)
 
-    # running multiple times to get the median value
-    # this helps account for random performance variation
-    p_values = [run_model(model_class, params) for _ in range(RERUN_COUNT)]
-    p_value = median(p_values)
+        # running multiple times to get the median value
+        # this helps account for random performance variation
+        p_values = [run_model(model_class, params) for _ in range(RERUN_COUNT)]
+        p_value = median(p_values)
 
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print(f"Iteration: {iteration} of {len(combinations_to_try)}")
-    print(f"Parameters: {params}")
-    print(f"P-value: {p_value}")
-    return params, p_value, execution_time, None
-    # except Exception as err:
-    #     return params, None, None, str(err)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Iteration: {iteration} of {len(combinations_to_try)}")
+        print(f"Parameters: {params}")
+        print(f"P-value: {p_value}")
+        return params, p_value, execution_time, None
+    except Exception as err:
+        return params, None, None, str(err)
 
 
 def iterate_hyperparameters():
