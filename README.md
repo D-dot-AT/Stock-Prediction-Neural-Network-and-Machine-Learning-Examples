@@ -74,7 +74,8 @@ Then, run any of the scripts in `simple_examples`
 
 ## About the Example Data
 
-The data provided in `example_data` is an example of what is downloadable on the D.AT platform.
+The data provided in `example_data` is an example of what is downloadable on the
+[D.AT data platform](https://d.at/ref/github-python-examples).
 
 This dataset encapsulates 5 years of price data of the companies comprising the S&P 500,
 segmented into intervals of 30 trading days each. The data in each segment
