@@ -5,13 +5,22 @@
 ## Simple Examples
 
 Simple ML and NN methods for those looking to learn new techniques for
-  stock prediction. These examples are meant to be easy to understand and highlight the essential components of each method.
-Examples also show how to run the models on current data in order to get stock predictions.
+stock prediction. These examples are meant to be easy to understand and highlight the essential components of each
+method. Examples also show how to run the models on current data in order to get stock predictions.
+
+ML examples include:
+* Genetic algorithms
+* Gradient boost
+* K-means clustering
+* Logistic regression
+* Random Forest
+* Support vector machines (SVM)
+
+
 
 ## Hyperparameter Optimization
+
 Full Hyperparameter readme here:  [Hyperparameter Tuning](hyperparameter_tuning/README.md)
-
-
 
 ## Getting Started
 
@@ -22,6 +31,7 @@ Full Hyperparameter readme here:  [Hyperparameter Tuning](hyperparameter_tuning/
 ```bash
 pip install -r requirements.txt
 ```
+
 Then, run any of the scripts in `simple_examples`
 
 ## About the Example Data
