@@ -2,6 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+* [Simple Examples](#simple-examples)
+* [Hyperparameter Optimization](#hyperparameter-optimization)
+
 ## Simple Examples
 
 Simple ML and NN methods for those looking to learn new techniques for
