@@ -16,7 +16,16 @@ ML examples include:
 * Random Forest
 * Support vector machines (SVM)
 
+NN examples include:
+* Feed-forward neural networks (FFNN)
+* Long short-term memory (LSTM)
+* Recurrant Neural Networkds (RNN)
 
+NN library examples for:
+* Keras
+* Lightning
+* PyTorch
+* Tensorflow
 
 ## Hyperparameter Optimization
 
