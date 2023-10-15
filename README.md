@@ -28,6 +28,12 @@ NN library examples for:
 * Tensorflow
 
 ## Hyperparameter Optimization
+Designed for easy configuration of what hyperparameter values are explored.  
+Multi-threaded processing for quick runtimes.
+
+1. code is in `hyperparameter_tuning`
+2. Edit `config.py` to suit your needs
+3. run `main.py`
 
 Full Hyperparameter readme here:  [Hyperparameter Tuning](hyperparameter_tuning/README.md)
 
@@ -42,6 +48,7 @@ pip install -r requirements.txt
 ```
 
 Then, run any of the scripts in `simple_examples`
+
 
 ## About the Example Data
 
