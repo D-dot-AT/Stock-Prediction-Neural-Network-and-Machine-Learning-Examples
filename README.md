@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+![Stock Prediction Neural Network and Machine Learning Examples ](https://repository-images.githubusercontent.com/669594930/b6bf1290-6278-4973-b7df-f698e226f23)
+
 * [Simple Examples](#simple-examples)
 * [Hyperparameter Optimization](#hyperparameter-optimization)
 
