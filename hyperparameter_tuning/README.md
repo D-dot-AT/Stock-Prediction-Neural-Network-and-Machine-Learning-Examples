@@ -1,7 +1,7 @@
-# Hyperparameter Search for Neural Networks
+# Hyperparameter Optimization for Neural Networks
 
-This script provides a mechanism to perform hyperparameter search for training neural networks. It supports both grid
-search (exploring all combinations) and random search.
+This script provides a mechanism to search for optimial hyperparameters for training neural networks.
+It supports both grid search (exploring all combinations) and random search.
 
 ## Hyperparameters Explored
 
@@ -23,8 +23,8 @@ Here are the hyperparameters we currently search across:
 
 ## Hyperparameter Values
 
-The `hyperparameter_values` dictionary in the code outlines the specific values and ranges we're exploring for each
-hyperparameter. Adjust the values in this dictionary to search across different hyperparameters.
+In `convig.py` the `hyperparameter_values` dictionary in the code outlines the specific values and ranges we're
+exploring for each hyperparameter. Adjust the values in this dictionary to search across different hyperparameters.
 
 ## Search Strategy
 
@@ -33,6 +33,17 @@ hyperparameter. Adjust the values in this dictionary to search across different 
 
 - **Random Search**: If `EXPLORE_ALL_COMBINATIONS` is set to `False`, the script will randomly sample from the
   hyperparameter space. The number of random combinations sampled is set by `NUMBER_OF_COMBINATIONS_TO_TRY`.
+
+## Performance Ranking
+All models were trained and tested on the `example_data` from [D.AT](https://d.at/ref/github-python-examples)
+to rank which performed best.
+
+Precision p-value is the method for comparing performance.  Why precision?
+When investing, you care much more about the performance of the stocks you have purchased
+than those that you decided not to buy. Put in real terms, the 10,000 no-buy decisions (negatives)
+are not nearly as important as the 50 buy decisions (positives) if all 50 have profitable exits (true positives).
+P-values are chosen as the measure because a low p-value rewards for both high precision and a large
+amount of true positives, connoting a more robust model.
 
 ## Robustness
 
@@ -56,5 +67,5 @@ To customize the hyperparameter search:
 
 ---
 
-Run the script and evaluate the performance across different hyperparameter combinations to find the optimal network
-configuration for your task.
+Run the script and results will be saved it the `results` dir. Evaluate the performance across different hyperparameter
+combinations to find the optimal network configuration for your task.

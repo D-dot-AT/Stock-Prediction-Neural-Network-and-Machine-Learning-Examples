@@ -13,10 +13,10 @@ def get_lstm(params, input_feature_size):
             # Number of features for each time step in input sequence
             self.input_feature_size = input_feature_size
             # Number of LSTM layers stacked together
-            self.num_layers = len(params[Hyper.HIDDEN_LAYERS])
+            self.num_layers = params[Hyper.LSTM_NUMBER_OF_LAYERS]
             # LSTM layers
             self.lstm = nn.LSTM(input_size=input_feature_size,
-                                hidden_size=params[Hyper.HIDDEN_LAYERS][0],
+                                hidden_size=params[Hyper.LSTM_HIDDEN_LAYER_SIZE],
                                 num_layers=self.num_layers,
                                 dropout=params[Hyper.DROPOUT] if self.num_layers > 1 else 0,
                                 batch_first=True)

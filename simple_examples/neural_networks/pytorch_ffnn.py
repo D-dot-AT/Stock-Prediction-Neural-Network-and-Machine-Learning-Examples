@@ -8,7 +8,7 @@ from common import print_statistics
 
 # Step 1: Data Preparation
 # 1. Load the training data
-data_train = pd.read_csv('../example_data/train.csv', header=None)
+data_train = pd.read_csv('../../example_data/train.csv', header=None)
 # 2. Separate data into X (features) and Y (labels)
 X_train = data_train.iloc[:, :-1].values
 Y_train = data_train.iloc[:, -1].values
@@ -39,7 +39,7 @@ for epoch in range(10):
 
 # Step 3: Model Testing
 # 1. Load and scale the test data
-data_test = pd.read_csv('../example_data/test.csv', header=None)
+data_test = pd.read_csv('../../example_data/test.csv', header=None)
 X_test = data_test.iloc[:, :-1].values
 Y_test = data_test.iloc[:, -1].values
 X_test = scaler.transform(X_test)
@@ -53,7 +53,7 @@ print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
 
 # Step 4: Creating Predictions
 # 1. Load data
-data_latest = pd.read_csv('../example_data/latest.csv')
+data_latest = pd.read_csv('../../example_data/latest.csv')
 X_latest = data_latest.iloc[:, 1:].values
 # 2. Predict scores
 X_latest = scaler.transform(X_latest)

@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix
 from common import print_statistics
 
 # Step 1: Data Preparation
-data_train = pd.read_csv('../example_data/train.csv', header=None)
+data_train = pd.read_csv('../../example_data/train.csv', header=None)
 X_train = data_train.iloc[:, :-1]
 Y_train = data_train.iloc[:, -1]
 
@@ -18,7 +18,7 @@ model = RandomForestClassifier(random_state=42)
 model.fit(X_train_scaled, Y_train)
 
 # Step 3: Model Testing
-data_test = pd.read_csv('../example_data/test.csv', header=None)
+data_test = pd.read_csv('../../example_data/test.csv', header=None)
 X_test = data_test.iloc[:, :-1]
 Y_test = data_test.iloc[:, -1]
 X_test_scaled = scaler.transform(X_test)
@@ -31,7 +31,7 @@ tn, fp, fn, tp = confusion_matrix(Y_test, Y_pred).ravel()
 print_statistics(tp=tp, fp=fp, tn=tn, fn=fn)
 
 # Step 4: Creating Predictions
-data_latest = pd.read_csv('../example_data/latest.csv')
+data_latest = pd.read_csv('../../example_data/latest.csv')
 stock_tickers = data_latest.iloc[:, 0]
 features_latest = data_latest.iloc[:, 1:]
 

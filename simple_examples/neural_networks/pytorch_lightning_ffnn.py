@@ -10,7 +10,7 @@ from common import print_statistics
 
 # Step 1: Data Preparation
 # Loading the training data
-train_data = pd.read_csv('../example_data/train.csv', header=None)
+train_data = pd.read_csv('../../example_data/train.csv', header=None)
 X = train_data.iloc[:, :-1].values
 Y = train_data.iloc[:, -1].values
 
@@ -23,20 +23,19 @@ X_scaled = scaler.fit_transform(X)
 input_features = X_scaled.shape[1]
 
 
-# Creating the RNN model
-class SimpleRNN(L.LightningModule):
+# Creating the neural network model
+class SimpleNN(L.LightningModule):
     def __init__(self):
         super().__init__()
-        self.rnn = nn.RNN(input_size=input_features, hidden_size=64, batch_first=True)
-        self.fc = nn.Linear(64, 1)
+        self.layer1 = nn.Linear(input_features, 64)
+        self.layer2 = nn.Linear(64, 1)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        x = x.type(self.rnn.weight_hh_l0.dtype)
-        h0 = torch.zeros(1, x.size(0), 64).type(self.rnn.weight_hh_l0.dtype).to(x.device)
-        out, _ = self.rnn(x.unsqueeze(1), h0)
-        out = self.sigmoid(self.fc(out[:, -1, :]))
-        return out
+        x = x.type(self.layer1.weight.dtype)
+        x = nn.ReLU()(self.layer1(x))
+        x = self.sigmoid(self.layer2(x))
+        return x
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -48,7 +47,7 @@ class SimpleRNN(L.LightningModule):
         return torch.optim.Adam(self.parameters(), lr=0.001)
 
 
-model = SimpleRNN()
+model = SimpleNN()
 
 # Step 3: Training the Model
 # Preparing data loaders
@@ -59,10 +58,9 @@ train_loader = DataLoader(train_dataset, batch_size=32)
 trainer = L.Trainer(max_epochs=5)
 trainer.fit(model, train_loader)
 
-
 # Step 4: Testing the Model
 # Loading the test data
-test_data = pd.read_csv('../example_data/test.csv', header=None)
+test_data = pd.read_csv('../../example_data/test.csv', header=None)
 X_test = test_data.iloc[:, :-1].values
 Y_test = test_data.iloc[:, -1].values
 
@@ -85,7 +83,7 @@ TN, FP, FN, TP = confusion_matrix(Y_test, predictions_bin).ravel()
 print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
 
 # Load latest data
-latest_data = pd.read_csv('../example_data/latest.csv')
+latest_data = pd.read_csv('../../example_data/latest.csv')
 tickers = latest_data.iloc[:, 0].values
 X_latest = scaler.transform(latest_data.iloc[:, 1:].values)
 

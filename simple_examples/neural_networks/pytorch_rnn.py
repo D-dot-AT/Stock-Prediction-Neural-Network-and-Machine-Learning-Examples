@@ -7,7 +7,7 @@ import torch.optim as optim
 from common import print_statistics
 
 # Step 1: Data Preparation
-data_train = pd.read_csv('../example_data/train.csv', header=None)
+data_train = pd.read_csv('../../example_data/train.csv', header=None)
 X_train = data_train.iloc[:, :-1].values
 Y_train = data_train.iloc[:, -1].values
 
@@ -18,22 +18,22 @@ X_train = scaler.fit_transform(X_train)
 input_features = X_train.shape[1]
 
 
-class LSTMModel(nn.Module):
+class SimpleRNN(nn.Module):
     def __init__(self):
-        super(LSTMModel, self).__init__()
-        self.lstm = nn.LSTM(input_size=input_features, hidden_size=64, batch_first=True)
+        super(SimpleRNN, self).__init__()
+        self.rnn = nn.RNN(input_size=input_features, hidden_size=64, batch_first=True)
         self.fc = nn.Linear(64, 1)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         x = x.view(-1, 1, input_features)
-        h_0, _ = self.lstm(x)
+        h_0, _ = self.rnn(x)
         h_0 = h_0[:, -1, :]
         x = self.sigmoid(self.fc(h_0))
         return x
 
 
-model = LSTMModel()
+model = SimpleRNN()
 
 criterion = nn.BCELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -50,7 +50,7 @@ for epoch in range(10):
         optimizer.step()
 
 # Step 3: Model Testing
-data_test = pd.read_csv('../example_data/test.csv', header=None)
+data_test = pd.read_csv('../../example_data/test.csv', header=None)
 X_test = data_test.iloc[:, :-1].values
 Y_test = data_test.iloc[:, -1].values
 X_test = scaler.transform(X_test)
@@ -62,7 +62,7 @@ TN, FP, FN, TP = confusion_matrix(Y_test, predictions).ravel()
 print_statistics(tp=TP, fp=FP, tn=TN, fn=FN)
 
 # Step 4: Creating Predictions
-data_latest = pd.read_csv('../example_data/latest.csv')
+data_latest = pd.read_csv('../../example_data/latest.csv')
 X_latest = data_latest.iloc[:, 1:].values
 X_latest = scaler.transform(X_latest)
 

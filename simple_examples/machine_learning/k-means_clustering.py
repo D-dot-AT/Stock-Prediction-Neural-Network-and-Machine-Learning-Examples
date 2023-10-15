@@ -6,7 +6,7 @@ from common import print_statistics
 
 # Step 1: Data Preparation
 # 1. Load the training data from train.csv (no header)
-data_train = pd.read_csv('../example_data/train.csv', header=None)
+data_train = pd.read_csv('../../example_data/train.csv', header=None)
 # 2. Separate data into X (features) and Y (labels)
 X_train = data_train.iloc[:, :-1]
 Y_train = data_train.iloc[:, -1]
@@ -22,7 +22,7 @@ model.fit(X_train_scaled, Y_train)
 
 # Step 3: Model Testing
 # 1. Load and scale the test data from test.csv using scaler
-data_test = pd.read_csv('../example_data/test.csv', header=None)
+data_test = pd.read_csv('../../example_data/test.csv', header=None)
 X_test = data_test.iloc[:, :-1]
 Y_test = data_test.iloc[:, -1]
 X_test_scaled = scaler.transform(X_test)
@@ -36,7 +36,7 @@ print_statistics(tp=tp, fp=fp, tn=tn, fn=fn)
 
 # Step 4: Creating Predictions
 # 1. Load data from latest.csv
-data_latest = pd.read_csv('../example_data/latest.csv')
+data_latest = pd.read_csv('../../example_data/latest.csv')
 stock_tickers = data_latest.iloc[:, 0]
 features_latest = data_latest.iloc[:, 1:]
 
