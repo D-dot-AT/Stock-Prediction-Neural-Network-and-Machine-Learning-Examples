@@ -13,7 +13,7 @@ Simple ML and NN methods for those looking to learn new techniques for
 stock prediction. These examples are meant to be easy to understand and highlight the essential components of each
 method. Examples also show how to run the models on current data in order to get stock predictions.
 
-ML examples include:
+### ML examples:
 * Genetic algorithms
 * Gradient boost
 * K-means clustering
@@ -21,12 +21,12 @@ ML examples include:
 * Random Forest
 * Support vector machines (SVM)
 
-NN examples include:
+### NN examples:
 * Feed-forward neural networks (FFNN)
 * Long short-term memory (LSTM)
 * Recurrant Neural Networkds (RNN)
 
-NN library examples for:
+### NN library examples:
 * Keras
 * Lightning
 * PyTorch
@@ -71,7 +71,6 @@ pip install -r requirements.txt
 ```
 
 Then, run any of the scripts in `simple_examples`
-
 
 ## About the Example Data
 
