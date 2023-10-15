@@ -4,8 +4,14 @@ import torch.optim as optim
 from torch import nn
 
 
+class StringEnum(Enum):
+
+    def __str__(self):
+        return self.value
+
+
 # Define an enum for hyperparameter keys to improve readability
-class Hyper(Enum):
+class Hyper(StringEnum):
     LEARNING_RATE = 'Learning Rate'
     MAX_EPOCHS = 'Max Epochs'
     BATCH_SIZE = 'Batch Size'
@@ -22,7 +28,7 @@ class Hyper(Enum):
 
 
 # Define an enum for optimizer keys
-class Optimizer(Enum):
+class Optimizer(StringEnum):
     ADAM = 'Adam'
     SGD = 'SGD'
     RMSPROP = 'RMSprop'
@@ -51,7 +57,7 @@ OPTIMIZER_CLASSES = {
 }
 
 
-class ActivationFunction(Enum):
+class ActivationFunction(StringEnum):
     ELU = "ELU"
     Hardshrink = "Hardshrink"
     Hardsigmoid = "Hardsigmoid"
@@ -148,9 +154,8 @@ ACTIVATION_FUNCTIONS_WORKING_ENUMS = [
 ]
 
 
-
 # Define an enum for weight initialization keys
-class WeightInit(Enum):
+class WeightInit(StringEnum):
     XAVIER_UNIFORM = 'xavier_uniform'
     XAVIER_NORMAL = 'xavier_normal'
     KAIMING_UNIFORM = 'kaiming_uniform'
@@ -184,7 +189,7 @@ WEIGHT_INITIALIZATIONS = {
 }
 
 
-class LossFunction(Enum):
+class LossFunction(StringEnum):
     MSE = 'MSE'
     SMOOTH_L1 = 'Smooth L1'
     HUBER = 'Huber'

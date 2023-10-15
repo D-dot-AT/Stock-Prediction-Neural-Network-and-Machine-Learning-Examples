@@ -70,11 +70,16 @@ def evaluate_hyperparameters(args):
 
 def store_results(results, errors):
     """Store results and errors to CSV files."""
+
     # Sort the results by p-value in ascending order and save to CSV
     sorted_results = sorted(results, key=lambda x: x['p_value'])
 
+    # Converting values to strings for easier readability
+    sorted_results = [{str(key): str(value) for key, value in data.items()} for data in sorted_results]
+    errors = [{str(key): str(value) for key, value in data.items()} for data in errors]
+
     with open('results/hyperparameter_results.csv', 'w', newline='') as csvfile:
-        fieldnames = list(hyperparameter_values.keys()) + ['p_value', 'execution_time']
+        fieldnames = [str(key) for key in hyperparameter_values.keys()] + ['p_value', 'execution_time']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(sorted_results)
@@ -82,7 +87,7 @@ def store_results(results, errors):
     # If there were errors, save them too
     if errors:
         with open('results/errors.csv', 'w', newline='') as errorFile:
-            fieldnames = list(hyperparameter_values.keys()) + ['error']
+            fieldnames = [str(key) for key in hyperparameter_values.keys()] + ['error']
             writer = csv.DictWriter(errorFile, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(errors)
