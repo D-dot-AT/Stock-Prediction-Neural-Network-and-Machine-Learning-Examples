@@ -4,6 +4,7 @@
 
 ![Stock Prediction Neural Network and Machine Learning Examples ](https://repository-images.githubusercontent.com/669594930/1b661bb8-d5d8-40ad-9d94-c3084f3df2fc)
 
+## Contents:
 * [Simple Examples](#simple-examples)
 * [Hyperparameter Optimization](#hyperparameter-optimization)
 * [Getting Started](#getting-started)
