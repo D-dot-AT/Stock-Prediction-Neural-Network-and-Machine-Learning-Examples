@@ -41,11 +41,10 @@ EXPLORE_ALL_COMBINATIONS = True
 NUMBER_OF_COMBINATIONS_TO_TRY = 100
 
 # Training Variability Reduction
-
 # To account for random variation in training, we can rerun
 # the training process multiple times and take the median performance.
 # Odd values recommended; 1 means each configuration runs once.
-RERUN_COUNT = 1
+RERUN_COUNT = 3
 
 # System Configuration
 
