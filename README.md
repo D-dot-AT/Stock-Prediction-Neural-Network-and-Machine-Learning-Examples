@@ -6,6 +6,8 @@
 
 * [Simple Examples](#simple-examples)
 * [Hyperparameter Optimization](#hyperparameter-optimization)
+* [Getting Started](#getting-started)
+* [About the Example Stock Data](#about-the-example-stock-data)
 
 ## Simple Examples
 
@@ -40,7 +42,7 @@ Multi-threaded processing for quick runtimes.
 2. Edit `config.py` to suit your needs
 3. run `hyper_main.py`
 
-## Hyperparameters Explored
+### Hyperparameters Explored
 
 Here are the hyperparameters we currently search across:
 
@@ -72,7 +74,7 @@ pip install -r requirements.txt
 
 Then, run any of the scripts in `simple_examples`
 
-## About the Example Data
+## About the Example Stock Data
 
 The data provided in `example_data` is an example of what is downloadable on the
 [D.AT data platform](https://d.at/ref/github-python-examples).
