@@ -190,13 +190,49 @@ WEIGHT_INITIALIZATIONS = {
 
 
 class LossFunction(StringEnum):
+    L1 = 'L1'
     MSE = 'MSE'
-    SMOOTH_L1 = 'Smooth L1'
+    CROSS_ENTROPY = 'Cross Entropy'
+    CTC = 'CTC'
+    NLL = 'NLL'
+    POISSON_NLL = 'Poisson NLL'
+    GAUSSIAN_NLL = 'Gaussian NLL'
+    KLDIV = 'KL Div'
+    BCE = 'BCE'
+    BCE_WITH_LOGITS = 'BCE With Logits'
+    MARGIN_RANKING = 'Margin Ranking'
+    HINGE_EMBEDDING = 'Hinge Embedding'
+    MULTI_LABEL_MARGIN = 'Multi Label Margin'
     HUBER = 'Huber'
+    SMOOTH_L1 = 'Smooth L1'
+    SOFT_MARGIN = 'Soft Margin'
+    MULTI_LABEL_SOFT_MARGIN = 'Multi-Label Soft Margin'
+    COSINE_EMBEDDING = 'Cosine Embedding'
+    MULTI_MARGIN = 'Multi Margin'
+    TRIPLET_MARGIN = 'Triplet Margin'
+    TRIPLET_MARGIN_WITH_DISTANCE = 'Triplet Margin With Distance'
 
 
 LOSS_FUNCTIONS = {
+    LossFunction.L1: nn.L1Loss,
     LossFunction.MSE: nn.MSELoss,
+    LossFunction.CROSS_ENTROPY: nn.CrossEntropyLoss,
+    LossFunction.CTC: nn.CTCLoss,
+    LossFunction.NLL: nn.NLLLoss,
+    LossFunction.POISSON_NLL: nn.PoissonNLLLoss,
+    LossFunction.GAUSSIAN_NLL: nn.GaussianNLLLoss,
+    LossFunction.KLDIV: nn.KLDivLoss,
+    LossFunction.BCE: nn.BCELoss,
+    LossFunction.BCE_WITH_LOGITS: nn.BCEWithLogitsLoss,
+    LossFunction.MARGIN_RANKING: nn.MarginRankingLoss,
+    LossFunction.HINGE_EMBEDDING: nn.HingeEmbeddingLoss,
+    LossFunction.MULTI_LABEL_MARGIN: nn.MultiLabelMarginLoss,
+    LossFunction.HUBER: nn.HuberLoss,
     LossFunction.SMOOTH_L1: nn.SmoothL1Loss,
-    LossFunction.HUBER: nn.HuberLoss
+    LossFunction.SOFT_MARGIN: nn.SoftMarginLoss,
+    LossFunction.MULTI_LABEL_SOFT_MARGIN: nn.MultiLabelSoftMarginLoss,
+    LossFunction.COSINE_EMBEDDING: nn.CosineEmbeddingLoss,
+    LossFunction.MULTI_MARGIN: nn.MultiMarginLoss,
+    LossFunction.TRIPLET_MARGIN: nn.TripletMarginLoss,
+    LossFunction.TRIPLET_MARGIN_WITH_DISTANCE: nn.TripletMarginWithDistanceLoss
 }

@@ -23,12 +23,12 @@ hyperparameter_values = {
         [2, 3, 2, 1, 0.5],
         [2, 3, 2, 1, 0.5, 0.25]
     ],
-    Hyper.LOSS_FUNCTION: [Lf.MSE, Lf.SMOOTH_L1, Lf.HUBER],
+    Hyper.LOSS_FUNCTION: [Lf.BCE, Lf.MSE, Lf.HUBER, Lf.SMOOTH_L1],
     Hyper.ACTIVATION_FUNCTION: [Af.LeakyReLU, Af.PReLU, Af.ReLU, Af.Tanh],
     Hyper.OPTIMIZER: [Opti.ADAM, Opti.RMSPROP],
-    Hyper.DROPOUT: [0, 0.2, 0.5],
-    Hyper.L1_REGULARIZATION: [0],  # Possible future values: [0, 0.01, 0.1]
-    Hyper.L2_REGULARIZATION: [0],  # Possible future values: [0, 0.01, 0.1]
+    Hyper.DROPOUT: [0, 0.2],
+    Hyper.L1_REGULARIZATION: [0],  # Common values: [0, 0.01, 0.1]
+    Hyper.L2_REGULARIZATION: [0],  # Common values: [0, 0.01, 0.1]
     Hyper.WEIGHT_INITIALIZATION: [Wi.XAVIER_UNIFORM, Wi.XAVIER_NORMAL]
 }
 
