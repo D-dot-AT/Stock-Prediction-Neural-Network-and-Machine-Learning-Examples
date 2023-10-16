@@ -38,7 +38,7 @@ Multi-threaded processing for quick runtimes.
 
 1. code is in `hyperparameter_tuning`
 2. Edit `config.py` to suit your needs
-3. run `main.py`
+3. run `hyper_main.py`
 
 ## Hyperparameters Explored
 
