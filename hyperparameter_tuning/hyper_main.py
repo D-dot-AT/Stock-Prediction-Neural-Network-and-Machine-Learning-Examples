@@ -30,6 +30,8 @@ def get_hyperparameter_combinations():
     """Generate hyperparameter combinations, either all or a subset."""
     all_combinations = list(product(*hyperparameter_values.values()))
 
+    print(f"Number of combinations: {len(all_combinations)}")
+
     if EXPLORE_ALL_COMBINATIONS:
         return all_combinations
 
