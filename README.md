@@ -73,12 +73,16 @@ Hyperparameter readme here:  [Hyperparameter Tuning](hyperparameter_tuning/READM
 pip install -r requirements.txt
 ```
 
+Download free stock data from [D.AT example data](https://d.at/example-data) 
+and save the `example_data` directory to this project folder. 
+
 Then, run any of the scripts in `simple_examples`
 
 ## About the Example Stock Data
 
+This code can be run with the example stock data available at 
 The data provided in `example_data` is an example of what is downloadable on the
-[D.AT data platform](https://d.at/ref/github-python-examples).
+[D.AT example data](https://d.at/example-data).
 
 This dataset encapsulates 5 years of price data of the companies comprising the S&P 500,
 segmented into intervals of 30 trading days each. The data in each segment
