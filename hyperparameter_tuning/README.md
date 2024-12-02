@@ -3,6 +3,22 @@
 This script provides a mechanism to search for optimal hyperparameters for training neural networks.
 It supports both grid search (exploring all combinations) and random search.
 
+### Hyperparameters Explored
+
+Here are the hyperparameters we currently search across:
+
+- **Learning Rate:** The step size at each iteration while moving towards a minimum of the loss function.
+- **Max Epochs:** The maximum number of times the learning algorithm will work through the entire training dataset.
+- **Batch Size:** The number of training examples utilized in one iteration.
+- **Hidden Layers:** The architecture of the neural network in terms of layers and nodes.
+- **Loss Function:** Determines the difference between the network's predictions and the actual data.
+- **Activation Function:** The function used to introduce non-linearity to the network.
+- **Optimizer:** Algorithms or methods used to change the attributes of the neural network such as weights to reduce the losses.
+- **Dropout:** A regularization method where input and recurrent connections to a layer are probabilistically excluded during training.
+- **L1 Regularization:** Adds a penalty for non-zero coefficients.
+- **L2 Regularization:** Adds a penalty for larger coefficient values.
+- **Weight Initialization:** Methods to set the initial random weights of neural network layers.
+
 ## Hyperparameter Values
 
 In `config.py` the `hyperparameter_values` dictionary in the code outlines the specific values and ranges we're
