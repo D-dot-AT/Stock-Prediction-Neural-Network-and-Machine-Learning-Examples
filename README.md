@@ -10,13 +10,21 @@
 * [Getting Started](#getting-started)
 * [About the Example Stock Data](#about-the-example-stock-data)
 
-## Simple Examples
+## Getting Started
 
-Simple ML and NN methods for those looking to learn new techniques for
-stock prediction. These examples are meant to be easy to understand and highlight the essential components of each
+These examples are made possible with precisely formatted stock data with the following necessary properties:
+* Windowed: time series is segmented into regular windows
+* Boolean labels: rather than predicting specific values at specific times, the data is class
+* Test/Train split: split chronologically for no data overlaps and look-ahead bias
+
+[Download the starter data.](https://d.at/example-data)
+
+## Overview
+These are ML and NN methods are ready to launch out of the box.  Designed to be easy for those looking to learn new techniques for
+stock prediction. These examples are meant to be simple to understand and highlight the essential components of each
 method. Examples also show how to run the models on current data in order to get stock predictions.
 
-### ML examples:
+### Machine Learning examples:
 * Genetic algorithms
 * Gradient boost
 * K-means clustering
@@ -24,18 +32,18 @@ method. Examples also show how to run the models on current data in order to get
 * Random Forest
 * Support vector machines (SVM)
 
-### NN examples:
+### Neural Net examples:
 * Feed-forward neural networks (FFNN)
 * Long short-term memory (LSTM)
-* Recurrant Neural Networkds (RNN)
+* Recurrent Neural Networkds (RNN)
 
-### NN library examples:
+### Neural Net library examples:
 * Keras
 * Lightning
 * PyTorch
 * Tensorflow
 
-## Hyperparameter Optimization
+## Neural Net Hyperparameter Optimization
 Designed for easy configuration of what hyperparameter values are explored.  
 Multi-threaded processing for quick runtimes.
 
