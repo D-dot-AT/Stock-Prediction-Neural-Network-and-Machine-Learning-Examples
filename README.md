@@ -72,4 +72,5 @@ This dataset encapsulates 5 years of price data of the companies comprising the 
 
 ### Getting new data
 
+The example data is static and does not contain current stock price values.
 Recent data customizable with different trading strategies and feature engineering options can be [downloaded for free at D.AT](https://d.at/ref/github-python-examples).
