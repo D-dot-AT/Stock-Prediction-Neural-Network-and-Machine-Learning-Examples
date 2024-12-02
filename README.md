@@ -10,19 +10,8 @@
 * [Getting Started](#getting-started)
 * [About the Example Stock Data](#about-the-example-stock-data)
 
-## Getting Started
-
-These examples are made possible with precisely formatted stock data with the following necessary properties:
-* Windowed: time series is segmented into regular windows
-* Boolean labels: rather than predicting specific values at specific times, the data is class
-* Test/Train split: split chronologically for no data overlaps and look-ahead bias
-
-[Download the starter data.](https://d.at/example-data)
-
 ## Overview
-These are ML and NN methods are ready to launch out of the box.  Designed to be easy for those looking to learn new techniques for
-stock prediction. These examples are meant to be simple to understand and highlight the essential components of each
-method. Examples also show how to run the models on current data in order to get stock predictions.
+These are ML and NN methods ready to launch out of the box. Designed to be easy for those looking to learn new techniques for stock prediction. These examples are meant to be simple to understand and highlight the essential components of each method. Examples also show how to run the models on current data in order to get stock predictions.
 
 ### Machine Learning examples:
 * Genetic algorithms
@@ -35,7 +24,7 @@ method. Examples also show how to run the models on current data in order to get
 ### Neural Net examples:
 * Feed-forward neural networks (FFNN)
 * Long short-term memory (LSTM)
-* Recurrent Neural Networkds (RNN)
+* Recurrent Neural Networks (RNN)
 
 ### Neural Net library examples:
 * Keras
@@ -43,74 +32,60 @@ method. Examples also show how to run the models on current data in order to get
 * PyTorch
 * Tensorflow
 
-## Neural Net Hyperparameter Optimization
-Designed for easy configuration of what hyperparameter values are explored.  
-Multi-threaded processing for quick runtimes.
-
-1. code is in `hyperparameter_tuning`
-2. Edit `config.py` to suit your needs
-3. run `hyper_main.py`
-
-### Hyperparameters Explored
-
-Here are the hyperparameters we currently search across:
-
-- **Learning Rate**: The step size at each iteration while moving towards a minimum of the loss function.
-- **Max Epochs**: The maximum number of times the learning algorithm will work through the entire training dataset.
-- **Batch Size**: The number of training examples utilized in one iteration.
-- **Hidden Layers**: The architecture of the neural network in terms of layers and nodes.
-- **Loss Function**: Determines the difference between the network's predictions and the actual data.
-- **Activation Function**: The function used to introduce non-linearity to the network.
-- **Optimizer**: Algorithms or methods used to change the attributes of the neural network such as weights to reduce the
-  losses.
-- **Dropout**: A regularization method where input and recurrent connections to a layer are probabilistically excluded
-  from during training.
-- **L1 Regularization**: Adds a penalty for non-zero coefficients.
-- **L2 Regularization**: Adds a penalty for larger coefficient values.
-- **Weight Initialization**: Methods to set the initial random weights of neural network layers.
-
-Hyperparameter readme here:  [Hyperparameter Tuning](hyperparameter_tuning/README.md)
-
 ## Getting Started
 
-1. Clone this repository.
-2. Navigate to the project directory.
-3. Install the necessary libraries:
+1. **Clone this repository.**
+2. **Navigate to the project directory.**
+3. **Install the necessary libraries:**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Download free stock data from [D.AT example data](https://d.at/example-data) 
-and save the `example_data` directory to this project folder. 
+4. **Download the starter data:**
+   - These examples require precisely formatted stock data with the following properties:
+     * **Windowed:** Time series is segmented into regular windows.
+     * **Boolean labels:** Rather than predicting specific values at specific times, the data is classified.
+     * **Test/Train split:** Split chronologically for no data overlaps and look-ahead bias.
+   - [Download the starter data.](https://d.at/example-data) and save the `example_data` directory to this project folder.
 
-Then, run any of the scripts in `simple_examples`
+5. **Run any of the scripts in `simple_examples`.**
+
+## Neural Net Hyperparameter Optimization
+Designed for easy configuration of what hyperparameter values are explored. Multi-threaded processing for quick runtimes.
+
+1. Code is in `hyperparameter_tuning`
+2. Edit `config.py` to suit your needs
+3. Run `hyper_main.py`
+
+### Hyperparameters Explored
+
+Here are the hyperparameters we currently search across:
+
+- **Learning Rate:** The step size at each iteration while moving towards a minimum of the loss function.
+- **Max Epochs:** The maximum number of times the learning algorithm will work through the entire training dataset.
+- **Batch Size:** The number of training examples utilized in one iteration.
+- **Hidden Layers:** The architecture of the neural network in terms of layers and nodes.
+- **Loss Function:** Determines the difference between the network's predictions and the actual data.
+- **Activation Function:** The function used to introduce non-linearity to the network.
+- **Optimizer:** Algorithms or methods used to change the attributes of the neural network such as weights to reduce the losses.
+- **Dropout:** A regularization method where input and recurrent connections to a layer are probabilistically excluded during training.
+- **L1 Regularization:** Adds a penalty for non-zero coefficients.
+- **L2 Regularization:** Adds a penalty for larger coefficient values.
+- **Weight Initialization:** Methods to set the initial random weights of neural network layers.
+
+Hyperparameter readme here: [Hyperparameter Tuning](hyperparameter_tuning/README.md)
 
 ## About the Example Stock Data
 
-This code can be run with the example stock data available at 
-The data provided in `example_data` is an example of what is downloadable on the
-[D.AT example data](https://d.at/example-data).
+This code can be run with the example stock data available at [D.AT example data](https://d.at/example-data).
 
-This dataset encapsulates 5 years of price data of the companies comprising the S&P 500,
-segmented into intervals of 30 trading days each. The data in each segment
-has been normalized using a method where values are divided by the most
-recent data point within the segment. Each row in the dataset represents a
-specific segment, providing a snapshot of the stock data available on a
-particular trading day. Rows are labeled to indicate when the
-stock had a minimum gain of 5% within the subsequent 10 trading days.
+This dataset encapsulates 5 years of price data of the companies comprising the S&P 500, segmented into intervals of 30 trading days each. The data in each segment has been normalized using a method where values are divided by the most recent data point within the segment. Each row in the dataset represents a specific segment, providing a snapshot of the stock data available on a particular trading day. Rows are labeled to indicate when the stock had a minimum gain of 5% within the subsequent 10 trading days.
 
 * `train.csv`: Of the 5 years, it contains the first 4 years of data.
 * `test.csv`: Of the 5 years, it contains the final year of data.
-* `latest.csv`: This file contains data from the most recent trading
-  day for all stocks listed. While it lacks labels (since these pertain to future events),
-  each row maintains the same feature vector structure as those in the `train` and `test`
-  files. The rows commence with the stock ticker symbol, serving as a key tool to pinpoint
-  stocks with promising prospects for good performance.
+* `latest.csv`: This file contains data from the most recent trading day for all stocks listed. While it lacks labels (since these pertain to future events), each row maintains the same feature vector structure as those in the `train` and `test` files. The rows commence with the stock ticker symbol, serving as a key tool to pinpoint stocks with promising prospects for good performance.
 
 ### Getting new data
 
-Recent data customizable with different trading strategies and feature engineering options can be [downloaded for free
-at D.AT](https://d.at/ref/github-python-examples).
-
-
+Recent data customizable with different trading strategies and feature engineering options can be [downloaded for free at D.AT](https://d.at/ref/github-python-examples).
